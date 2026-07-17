@@ -1,1 +1,182 @@
-<PLACEHOLDER>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physical Computing Course Quiz</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f0f4f8;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.quiz-container{background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.1);max-width:850px;width:100%;padding:40px}
+.quiz-header{text-align:center;margin-bottom:30px}
+.quiz-header h1{color:#2c3e50;font-size:28px;margin-bottom:8px}
+.quiz-header p{color:#7f8c8d;font-size:16px}
+.progress-bar{background:#e0e7ef;border-radius:10px;height:8px;margin-bottom:25px;overflow:hidden}
+.progress-fill{background:#3498db;height:100%;border-radius:10px;transition:width .4s ease;width:0%}
+.question-counter{text-align:right;color:#7f8c8d;font-size:14px;margin-bottom:15px}
+.question-card{display:none}
+.question-card.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.question-text{font-size:17px;color:#2c3e50;line-height:1.6;margin-bottom:20px;padding:18px;background:#f8fafc;border-left:4px solid #3498db;border-radius:8px}
+.question-text code{font-family:'Courier New',monospace;background:#e8eef5;padding:2px 6px;border-radius:4px;font-size:15px}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.option{padding:14px 18px;border:2px solid #e0e7ef;border-radius:10px;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;gap:12px;font-size:15px;color:#34495e}
+.option:hover{border-color:#3498db;background:#f0f7ff}
+.option.selected-correct{border-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:600}
+.option.selected-wrong{border-color:#e74c3c;background:#fdf0ef;color:#e74c3c;font-weight:600}
+.option.reveal-correct{border-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:600}
+.option.disabled{pointer-events:none;opacity:.7}
+.option-letter{width:30px;height:30px;border-radius:50%;background:#e0e7ef;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.option.selected-correct .option-letter,.option.reveal-correct .option-letter{background:#27ae60;color:#fff}
+.option.selected-wrong .option-letter{background:#e74c3c;color:#fff}
+.feedback{padding:14px 18px;border-radius:10px;margin-bottom:18px;display:none;font-size:15px;font-weight:600}
+.feedback.show{display:block;animation:fadeIn .3s ease}
+.feedback.correct{background:#e8f8f0;color:#27ae60;border:1px solid #27ae60}
+.feedback.wrong{background:#fdf0ef;color:#e74c3c;border:1px solid #e74c3c}
+.btn-next{background:#3498db;color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:15px;cursor:pointer;float:right;transition:background .3s ease;display:none}
+.btn-next.show{display:inline-block}
+.btn-next:hover{background:#2980b9}
+.results-card{display:none;text-align:center;animation:fadeIn .5s ease}
+.results-card.show{display:block}
+.results-icon{font-size:70px;margin-bottom:15px}
+.results-score{font-size:44px;font-weight:700;color:#2c3e50;margin-bottom:8px}
+.results-message{font-size:18px;color:#7f8c8d;margin-bottom:25px}
+.score-breakdown{background:#f8fafc;border-radius:12px;padding:18px;margin-bottom:25px;text-align:left;max-height:350px;overflow-y:auto}
+.score-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e0e7ef;font-size:14px;gap:15px}
+.score-item:last-child{border-bottom:none}
+.score-item .correct-ans{color:#27ae60;font-weight:600;white-space:nowrap}
+.score-item .wrong-ans{color:#e74c3c;font-weight:600;white-space:nowrap}
+.btn-restart{background:#3498db;color:#fff;border:none;padding:12px 35px;border-radius:10px;font-size:15px;cursor:pointer;transition:background .3s ease}
+.btn-restart:hover{background:#2980b9}
+.start-card,.menu-card{text-align:center;animation:fadeIn .5s ease}
+.start-icon{font-size:70px;margin-bottom:15px}
+.start-card h2,.menu-card h2{color:#2c3e50;font-size:24px;margin-bottom:12px}
+.start-card p,.menu-card>p{color:#7f8c8d;font-size:15px;margin-bottom:25px;line-height:1.6}
+.btn-start{background:#27ae60;color:#fff;border:none;padding:14px 45px;border-radius:12px;font-size:17px;cursor:pointer;transition:background .3s ease;font-weight:600}
+.btn-start:hover{background:#219a52}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:25px;text-align:left}
+.menu-item{background:#f8fafc;border:2px solid #e0e7ef;border-radius:12px;padding:20px;cursor:pointer;transition:all .3s ease}
+.menu-item:hover{border-color:#3498db;background:#f0f7ff;transform:translateY(-2px)}
+.menu-item h3{color:#2c3e50;font-size:16px;margin-bottom:6px}
+.menu-item p{color:#7f8c8d;font-size:13px}
+.menu-item .badge{display:inline-block;background:#3498db;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;margin-top:8px}
+.menu-item.completed{border-color:#27ae60;background:#e8f8f0}
+.menu-item.completed .badge{background:#27ae60}
+.menu-item.completed h3::after{content:" &#10004;";color:#27ae60}
+.part-info{text-align:center;padding:15px;background:#f0f7ff;border-radius:10px;margin-bottom:20px}
+.part-info h3{color:#2c3e50;margin-bottom:5px}
+.part-info p{color:#7f8c8d;font-size:14px}
+.circuit-img{max-width:100%;height:auto;margin:15px 0;border:1px solid #e0e7ef;border-radius:8px;background:#fff}
+.back-btn{background:#7f8c8d;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;transition:background .3s ease;margin-right:10px}
+.back-btn:hover{background:#636e72}
+.btn-group{display:flex;justify-content:space-between;align-items:center;margin-top:15px}
+.final-results{background:#f8fafc;border-radius:12px;padding:25px;margin:20px 0}
+.final-results h3{color:#2c3e50;margin-bottom:15px;font-size:20px}
+.part-score-row{display:flex;justify-content:space-between;padding:10px 15px;border-bottom:1px solid #e0e7ef;font-size:15px}
+.part-score-row:last-child{border-bottom:none}
+.overall-score{font-size:36px;font-weight:700;color:#2c3e50;margin-top:15px}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f1f1f1;border-radius:3px}
+::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:3px}
+@media(max-width:600px){.quiz-container{padding:20px}.question-text{font-size:15px}.option{font-size:14px;padding:12px 14px}.menu-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="quiz-container">
+<div class="quiz-header">
+<h1>&#127891; Physical Computing Course Quiz</h1>
+<p>Multi-part interactive quiz with instant feedback</p>
+</div>
+<div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- START SCREEN -->
+<div class="start-card" id="startCard">
+<div class="start-icon">&#128161;</div>
+<h2>Welcome to the Course Quiz!</h2>
+<p>This comprehensive quiz contains <strong>50 multiple-choice questions</strong> across <strong>5 parts</strong>:<br><br>
+&#9654; <strong>Part A</strong> - Physical Computing Concepts (10 Qs)<br>
+&#9654; <strong>Part B</strong> - Output of Logical Gates (3 Qs)<br>
+&#9654; <strong>Part C</strong> - 1's and 2's Complements (9 Qs)<br>
+&#9654; <strong>Part D</strong> - Computer Architecture (13 Qs)<br>
+&#9654; <strong>Part E</strong> - I/O Module (15 Qs)<br><br>
+Select the best answer for each question. You'll see instant feedback after each answer!</p>
+<button class="btn-start" onclick="showMenu()">Get Started</button>
+</div>
+
+<!-- MAIN MENU -->
+<div class="menu-card hidden" id="menuCard">
+<div class="start-icon">&#128218;</div>
+<h2>Select a Part to Begin</h2>
+<p>Choose any part to start. Complete all parts to see your overall score.</p>
+<div class="menu-grid">
+<div class="menu-item" id="menu-a" onclick="startPart('A')">
+<h3>Part A: Physical Computing</h3>
+<p>Covers sensors, actuators, microcontrollers, prototyping, and interactivity concepts.</p>
+<span class="badge">10 Questions</span>
+</div>
+<div class="menu-item" id="menu-b" onclick="startPart('B')">
+<h3>Part B: Logical Gates</h3>
+<p>Analyze logic gate circuits and determine outputs for given inputs.</p>
+<span class="badge">3 Questions</span>
+</div>
+<div class="menu-item" id="menu-c" onclick="startPart('C')">
+<h3>Part C: 1's &amp; 2's Complements</h3>
+<p>Binary subtraction using complement methods and decimal conversions.</p>
+<span class="badge">9 Questions</span>
+</div>
+<div class="menu-item" id="menu-d" onclick="startPart('D')">
+<h3>Part D: Computer Architecture</h3>
+<p>RISC vs CISC, memory hierarchy, buses, pipelining, and processor design.</p>
+<span class="badge">13 Questions</span>
+</div>
+<div class="menu-item" id="menu-e" onclick="startPart('E')">
+<h3>Part E: I/O Module</h3>
+<p>DMA, interrupt-driven I/O, programmed I/O, buffering, and bus arbitration.</p>
+<span class="badge">15 Questions</span>
+</div>
+<div class="menu-item" style="background:#e8f5e9;border-color:#27ae60" id="menu-final" onclick="showFinalResults()">
+<h3>&#127942; See Final Results</h3>
+<p>View your combined score across all completed parts.</p>
+<span class="badge" style="background:#27ae60">Overall Score</span>
+</div>
+</div>
+</div>
+
+<!-- PART INFO BAR -->
+<div class="part-info hidden" id="partInfo">
+<h3 id="partTitle">Part A</h3>
+<p id="partDesc">Physical Computing Concepts</p>
+</div>
+
+<!-- QUIZ AREA -->
+<div id="quizArea" class="hidden">
+<div class="question-counter" id="questionCounter">Question 1 of 10</div>
+<div id="questionsContainer"></div>
+</div>
+
+<!-- PART RESULTS -->
+<div class="results-card" id="partResults">
+<div class="results-icon" id="partResultsIcon">&#127942;</div>
+<div class="results-score" id="partResultsScore"></div>
+<div class="results-message" id="partResultsMessage"></div>
+<div class="score-breakdown" id="partScoreBreakdown"></div>
+<div style="display:flex;justify-content:center;gap:12px">
+<button class="btn-restart" onclick="showMenu()">&#8592; Back to Menu</button>
+<button class="btn-start" id="nextPartBtn" onclick="nextPart()">Next Part &#8594;</button>
+</div>
+</div>
+
+<!-- FINAL RESULTS -->
+<div class="results-card" id="finalResultsCard">
+<div class="results-icon">&#127941;</div>
+<div class="results-score" id="finalOverallScore"></div>
+<div class="results-message" id="finalOverallMessage"></div>
+<div class="final-results" id="finalBreakdown"></div>
+<button class="btn-restart" onclick="showMenu()">&#8592; Back to Menu</button>
+<button class="btn-start" onclick="restartAll()" style="margin-left:10px">Restart All</button>
+</div>
+</div>
+
+<script>
+const questionsData={A:[{q:"A smart home device turns on lights when motion is detected. However, the lights turn on even when the room is already bright.<br><br>Which improvement would most likely fix the issue?",opts:["Add another actuator","Add a light sensor to the system","Replace the microcontroller","Increase Wi-Fi bandwidth"],ans:1},{q:"A smart irrigation system measures soil moisture but the water pump never turns on even when the soil is dry.<br><br>Which situation could explain this?",opts:["The sensor is working but the actuator is not connected","The microcontroller is receiving too much power","The communication protocol is incorrect","The system has too many sensors"],ans:0},{q:"A wearable health device records heart rate but stores the data locally instead of sending it to a smartphone.<br><br>Which capability is missing from the system?",opts:["Communication","Interactivity","Prototyping","User interface"],ans:0},{q:"A prototype smart door lock uses a keypad to enter a password and a motor to open the door.<br><br>Which pair correctly identifies the <strong>input device</strong> and <strong>actuator</strong>?",opts:["Keypad - Microcontroller","Keypad - Motor","Motor - Keypad","Microcontroller - Keypad"],ans:1},{q:"A student builds a prototype robot that detects obstacles and changes direction automatically.<br><br>Which property of physical computing is being demonstrated?",opts:["Static automation","Environmental sensing and response","Data Storage","Network Routing"],ans:1},{q:"A smart thermostat displays the current temperature and allows users to adjust it using buttons.<br><br>Which concept best describes the buttons and display used by the user?",opts:["Communication Protocol","User Interface","Actuation System","Microcontroller Logic"],ans:1},{q:"A group of students builds an early version of a smart home door system using a breadboard and jumper wires to test ideas quickly.<br><br>This stage of development is best described as:",opts:["Deployment","Manufacturing","Prototyping","Optimisation"],ans:2},{q:"During a prototype demonstration, a student presses a button and a robot arm immediately moves.<br><br>Which concept of physical computing is most directly demonstrated here?",opts:["Communication","Interactivity","Prototyping","Programming"],ans:1},{q:"A wearable fitness shirt measures heart rate and sends the data to a smartphone app for analysis.<br><br>Which element of physical computing is responsible for detecting the heart rate signal?",opts:["Actuator","Sensor","Microcontroller","Communication Protocol"],ans:1},{q:"A smart greenhouse system measures temperature and automatically turns on a cooling fan when the temperature exceeds a threshold.<br><br>Which component in this system performs the <strong>decision-making</strong>?",opts:["Temperature sensor","Microcontroller","Actuator","Power supply"],ans:1}],B:[{q:'What is the output of this circuit when A=0 and B=1?<br><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCADBAlgDASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAQGAQMFAgf/xABLEAABBAEBBAMMBgcGBAcAAAAAAQIDBAURBhIhMRMUQRUWIjJRVGFxkZKT0TQ2c4GxwSNSVWJ0obIzN0JWcoNTZXXhByQlQ2Nkgv/EABsBAQACAwEBAAAAAAAAAAAAAAADBAEFBgIH/8QAKREBAAICAQMCBQUBAAAAAAAAAAECAwQRBSExEkEGMmGRoRMiI1HBcf/aAAwDAQACEQMRAD8A+zAADRYp17bo1nhZIsTt9m8mu67TTVPuVTw/HVJOn367HdY06XVPH04cfYSgBCsYfHWlkWxTikWTd395vjbuu7r6tVMMw2OjbA1lOJra71kiRG+I5eap6ScAIlnF0bm91mtHLvoiO3k11RD2lCqlJaSQM6srFZ0Wng7q9hIAEVmMpRxOiZWjaxzWtc1E4KjfFT7jwmIx6Xeu9Ui6z/xd3wiaAIdzFUL8sctqrHM+LxHPTVW8deB5mwuNnspZlpQvmRyO31bx1TkpOAHLtbPY609HOrxojrHTzN3delduubx97X7ja/CYySCGB9KF0UGvRMVvBmvPQngCFFiMfA+s+KpEx1VixwKjf7Nq80Q9S4ylPcjuS1o32IvEkVPCb6iWANcUEUO/0bEbvuV7tO1y81I9bE0Kjmur1Iola5zkVrdNFdzX7yYAIMmFxssSRSUonMRiM3Vbw3U5J9xubQqspLSbAxK6tVqxIng6LzQkACDFhsdBEkUVOJkaI5EajeHFUVfaqJ7D1YxVG1LFLPVjkfBp0bnN1VmnkJgA564HFLM6ZaMPSOVzldu8VVUVFX70VTczGUo7EVhlaNssMXRRvROLWfqp6CUAIsmNpTdP0laN3WUak2qePpy19QXHU1bK3q8ekzd2RNPGTTTRfuJQAhvxNCS7119WJbGit6VW+FpoqaexVNjaFVjoHNgYi10VsSoniIvPT16EgAaUqQJFJEkTUZKrle3Tg5Xc9fWbGMbHGkbERGtTRETsQ9ACJVxlKlNJLWrRxPlXV7mporvWeG4XGsurcbTiSwrt5ZEb4WvLUnACJHjKUUUcUdaNrImKxjUTg1q80QxSxNDHOc6nUigVyI1ysbpqiciYAOdFgMVBdW7FQgZYV6yLKjfC3l5r6zogARu59TopIurs3JJOle3Tg5+uuq+nVEUkJwMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAq2V2hylLaR9OpRS3Xirtlka12j0RV4qh1sVn6GWTdrzJ0zU8OJ3BzPWB0wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADC8gMgr8lXaTuc5jL8SWen1R+4n9n5DpV48g3Jzvnna6o5jUiYiIitd/i9IE4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABW4f7wrP8AAt/qJWT2Yp35etQ61LqcW2I+evpTtIsP94Vn+Bb/AFFkAqndrLbPObDmoluV1X6ZEmm6n7zSx1L<response clipped><NOTE>Lines longer than **2000 characters** will be **truncated**.
