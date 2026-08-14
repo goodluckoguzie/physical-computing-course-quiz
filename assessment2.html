@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physical Computing - Assessment 2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f0f4f8;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.quiz-container{background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.1);max-width:850px;width:100%;padding:40px}
+.quiz-header{text-align:center;margin-bottom:30px}
+.quiz-header h1{color:#2c3e50;font-size:28px;margin-bottom:8px}
+.quiz-header p{color:#7f8c8d;font-size:16px}
+.progress-bar{background:#e0e7ef;border-radius:10px;height:8px;margin-bottom:25px;overflow:hidden}
+.progress-fill{background:#3498db;height:100%;border-radius:10px;transition:width .4s ease;width:0%}
+.question-counter{text-align:right;color:#7f8c8d;font-size:14px;margin-bottom:15px}
+.question-card{display:none}
+.question-card.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.question-text{font-size:17px;color:#2c3e50;line-height:1.6;margin-bottom:20px;padding:18px;background:#f8fafc;border-left:4px solid #3498db;border-radius:8px}
+.question-text code{font-family:'Courier New',monospace;background:#e8eef5;padding:2px 6px;border-radius:4px;font-size:15px}
+.question-text pre{background:#1e293b;color:#e2e8f0;padding:14px;border-radius:8px;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.option{padding:14px 18px;border:2px solid #e0e7ef;border-radius:10px;cursor:pointer;transition:all .3s ease;display:flex;align-items:center;gap:12px;font-size:15px;color:#34495e}
+.option:hover{border-color:#3498db;background:#f0f7ff}
+.option.selected-correct{border-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:600}
+.option.selected-wrong{border-color:#e74c3c;background:#fdf0ef;color:#e74c3c;font-weight:600}
+.option.reveal-correct{border-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:600}
+.option.disabled{pointer-events:none;opacity:.7}
+.option-letter{width:30px;height:30px;border-radius:50%;background:#e0e7ef;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.option.selected-correct .option-letter,.option.reveal-correct .option-letter{background:#27ae60;color:#fff}
+.option.selected-wrong .option-letter{background:#e74c3c;color:#fff}
+.feedback{padding:14px 18px;border-radius:10px;margin-bottom:18px;display:none;font-size:15px;font-weight:600}
+.feedback.show{display:block;animation:fadeIn .3s ease}
+.feedback.correct{background:#e8f8f0;color:#27ae60;border:1px solid #27ae60}
+.feedback.wrong{background:#fdf0ef;color:#e74c3c;border:1px solid #e74c3c}
+.btn-next{background:#3498db;color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:15px;cursor:pointer;float:right;transition:background .3s ease;display:none}
+.btn-next.show{display:inline-block}
+.btn-next:hover{background:#2980b9}
+.results-card{display:none;text-align:center;animation:fadeIn .5s ease}
+.results-card.show{display:block}
+.results-icon{font-size:70px;margin-bottom:15px}
+.results-score{font-size:44px;font-weight:700;color:#2c3e50;margin-bottom:8px}
+.results-message{font-size:18px;color:#7f8c8d;margin-bottom:25px}
+.score-breakdown{background:#f8fafc;border-radius:12px;padding:18px;margin-bottom:25px;text-align:left;max-height:350px;overflow-y:auto}
+.score-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e0e7ef;font-size:14px;gap:15px}
+.score-item:last-child{border-bottom:none}
+.score-item .correct-ans{color:#27ae60;font-weight:600;white-space:nowrap}
+.score-item .wrong-ans{color:#e74c3c;font-weight:600;white-space:nowrap}
+.btn-restart{background:#3498db;color:#fff;border:none;padding:12px 35px;border-radius:10px;font-size:15px;cursor:pointer;transition:background .3s ease}
+.btn-restart:hover{background:#2980b9}
+.start-card,.menu-card{text-align:center;animation:fadeIn .5s ease}
+.start-icon{font-size:70px;margin-bottom:15px}
+.start-card h2,.menu-card h2{color:#2c3e50;font-size:24px;margin-bottom:12px}
+.start-card p,.menu-card>p{color:#7f8c8d;font-size:15px;margin-bottom:25px;line-height:1.6}
+.btn-start{background:#27ae60;color:#fff;border:none;padding:14px 45px;border-radius:12px;font-size:17px;cursor:pointer;transition:background .3s ease;font-weight:600}
+.btn-start:hover{background:#219a52}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:25px;text-align:left}
+.menu-item{background:#f8fafc;border:2px solid #e0e7ef;border-radius:12px;padding:20px;cursor:pointer;transition:all .3s ease}
+.menu-item:hover{border-color:#3498db;background:#f0f7ff;transform:translateY(-2px)}
+.menu-item h3{color:#2c3e50;font-size:16px;margin-bottom:6px}
+.menu-item p{color:#7f8c8d;font-size:13px}
+.menu-item .badge{display:inline-block;background:#3498db;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;margin-top:8px}
+.menu-item.completed{border-color:#27ae60;background:#e8f8f0}
+.menu-item.completed .badge{background:#27ae60}
+.part-info{text-align:center;padding:15px;background:#f0f7ff;border-radius:10px;margin-bottom:20px}
+.part-info h3{color:#2c3e50;margin-bottom:5px}
+.part-info p{color:#7f8c8d;font-size:14px}
+.back-btn{background:#7f8c8d;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;transition:background .3s ease;margin-right:10px}
+.back-btn:hover{background:#636e72}
+.btn-group{display:flex;justify-content:space-between;align-items:center;margin-top:15px}
+.final-results{background:#f8fafc;border-radius:12px;padding:25px;margin:20px 0}
+.final-results h3{color:#2c3e50;margin-bottom:15px;font-size:20px}
+.part-score-row{display:flex;justify-content:space-between;padding:10px 15px;border-bottom:1px solid #e0e7ef;font-size:15px}
+.part-score-row:last-child{border-bottom:none}
+.overall-score{font-size:36px;font-weight:700;color:#2c3e50;margin-top:15px}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f1f1f1;border-radius:3px}
+::-webkit-scrollbar-thumb{background:#c1c1c1;border-radius:3px}
+@media(max-width:600px){.quiz-container{padding:20px}.question-text{font-size:15px}.option{font-size:14px;padding:12px 14px}.menu-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="quiz-container">
+<div class="quiz-header">
+<h1>&#127891; Physical Computing - Assessment 2</h1>
+<p>Multi-part interactive quiz with instant feedback</p>
+</div>
+<div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="start-card" id="startCard">
+<div class="start-icon">&#128161;</div>
+<h2>Welcome to Assessment 2!</h2>
+<p>This assessment contains <strong>50 multiple-choice questions</strong> across <strong>6 parts</strong>:<br><br>
+&#9654; <strong>Part A</strong> - CPU Scheduling (5 Qs)<br>
+&#9654; <strong>Part B</strong> - Deadlock &amp; Starvation (15 Qs)<br>
+&#9654; <strong>Part C</strong> - Virtualization (5 Qs)<br>
+&#9654; <strong>Part D</strong> - Security (5 Qs)<br>
+&#9654; <strong>Part E</strong> - Memory Management (14 Qs)<br>
+&#9654; <strong>Part F</strong> - Bash &amp; Python (6 Qs)<br><br>
+Select the best answer for each question. You'll see instant feedback after each answer!</p>
+<button class="btn-start" onclick="showMenu()">Get Started</button>
+</div>
+
+<div class="menu-card hidden" id="menuCard">
+<div class="start-icon">&#128218;</div>
+<h2>Select a Part to Begin</h2>
+<p>Choose any part to start. Complete all parts to see your overall score.</p>
+<div class="menu-grid">
+<div class="menu-item" id="menu-a" onclick="startPart('A')"><h3>Part A: CPU Scheduling</h3><p>FCFS, Round Robin, SPN, Priority, and Preemptive scheduling.</p><span class="badge">5 Questions</span></div>
+<div class="menu-item" id="menu-b" onclick="startPart('B')"><h3>Part B: Deadlock &amp; Starvation</h3><p>Deadlock conditions, prevention, detection, and IPC mechanisms.</p><span class="badge">15 Questions</span></div>
+<div class="menu-item" id="menu-c" onclick="startPart('C')"><h3>Part C: Virtualization</h3><p>Hypervisors, VMM, virtual devices, and hardware emulation.</p><span class="badge">5 Questions</span></div>
+<div class="menu-item" id="menu-d" onclick="startPart('D')"><h3>Part D: Security</h3><p>Root users, insider threats, masqueraders, and clandestine users.</p><span class="badge">5 Questions</span></div>
+<div class="menu-item" id="menu-e" onclick="startPart('E')"><h3>Part E: Memory Management</h3><p>Paging, segmentation, fragmentation, and placement algorithms.</p><span class="badge">14 Questions</span></div>
+<div class="menu-item" id="menu-f" onclick="startPart('F')"><h3>Part F: Bash &amp; Python</h3><p>Script output, conditionals, loops, and multiprocessing.</p><span class="badge">6 Questions</span></div>
+<div class="menu-item" style="background:#e8f5e9;border-color:#27ae60" id="menu-final" onclick="showFinalResults()"><h3>&#127942; See Final Results</h3><p>View your combined score across all completed parts.</p><span class="badge" style="background:#27ae60">Overall Score</span></div>
+</div>
+</div>
+
+<div class="part-info hidden" id="partInfo"><h3 id="partTitle">Part A</h3><p id="partDesc">CPU Scheduling</p></div>
+
+<div id="quizArea" class="hidden"><div class="question-counter" id="questionCounter">Question 1 of 5</div><div id="questionsContainer"></div></div>
+
+<div class="results-card" id="partResults"><div class="results-icon" id="partResultsIcon">&#127942;</div><div class="results-score" id="partResultsScore"></div><div class="results-message" id="partResultsMessage"></div><div class="score-breakdown" id="partScoreBreakdown"></div><div style="display:flex;justify-content:center;gap:12px"><button class="btn-restart" onclick="showMenu()">&#8592; Back to Menu</button><button class="btn-start" id="nextPartBtn" onclick="nextPart()">Next Part &#8594;</button></div></div>
+
+<div class="results-card" id="finalResultsCard"><div class="results-icon">&#127941;</div><div class="results-score" id="finalOverallScore"></div><div class="results-message" id="finalOverallMessage"></div><div class="final-results" id="finalBreakdown"></div><button class="btn-restart" onclick="showMenu()">&#8592; Back to Menu</button><button class="btn-start" onclick="restartAll()" style="margin-left:10px">Restart All</button></div>
+</div>
+
+<script>
+const questionsData={
+A:[
+{q:"Which scheduling algorithm can cause starvation if lower-priority processes are continuously ignored?",opts:["Round Robin","FCFS","Preemptive Priority Scheduling","SPN"],ans:2},
+{q:"Which of the following is a disadvantage of the First-Come, First-Served (FCFS) scheduling algorithm?",opts:["Leads to lower device and CPU utilization thereby decreasing the efficiency of the system","Requires knowledge of burst time","High overhead due to frequent context switching","Inefficient memory usage"],ans:0},
+{q:"In which scheduling policy is the process with the shortest estimated run time selected next?",opts:["FCFS","SPN","Round Robin","Priority Scheduling"],ans:1},
+{q:"Which CPU scheduling algorithm assigns a fixed time slice to each process in a cyclic order?",opts:["Round Robin","FCFS","SPN","Priority Scheduling"],ans:0},
+{q:"Which of the following scheduling policies allows the operating system to interrupt a running process and place it back in the Ready state?",opts:["FIFO","FCFS","Non-preemptive","Preemptive"],ans:3}
+],
+B:[
+{q:"A set of processes is ______ when each process in the set is blocked awaiting an event that can only be triggered by another blocked process in the set.",opts:["spinlocked","stagnant","preempted","deadlocked"],ans:3},
+{q:"Examples of ______ include processors, I/O channels, main and secondary memory, devices, and data structures such as files, databases, and semaphores.",opts:["regional resources","joint resources","reusable resources","consumable resources"],ans:2},
+{q:"With ______ only one process may use a resource at a time and no process may access a resource unit that has been allocated to another process.",opts:["hold and wait","mutual exclusion","no preemption","circular wait"],ans:1},
+{q:"A closed chain of processes exists, such that each process holds at least one resource needed by the next process in the chain. This is the condition of ______.",opts:["no preemption","mutual exclusion","circular wait","hold and wait"],ans:2},
+{q:"Once the processes have progressed into the ______, those processes will deadlock.",opts:["fatal region","regional resources","spinlock","hold and wait"],ans:0},
+{q:"The strategy of deadlock ______ is to design a system in such a way that the possibility of deadlock is excluded.",opts:["prevention","detection","diversion","avoidance"],ans:0},
+{q:"The ______ condition can be prevented by requiring that a process request all of its required resources at one time and blocking the process until all requests can be granted simultaneously.",opts:["mutual exclusion","hold and wait","circular wait","no preemption"],ans:1},
+{q:"The fastest form of interprocess communication provided in UNIX is ______.",opts:["shared memory","message","pipe","semaphore"],ans:0},
+{q:"The ______ condition can be prevented by defining a linear ordering of resource types.",opts:["hold and wait","no preemption","mutual exclusion","circular wait"],ans:3},
+{q:"Requested resources are granted to processes whenever possible with ______.",opts:["preemption","deadlock detection","mutual exclusion","deadlock avoidance"],ans:1},
+{q:"One of the most significant contributions of UNIX to the development of operating systems is the ______.",opts:["semaphore","shared memory","message","pipe"],ans:3},
+{q:"A ______ is a software mechanism that informs a process of the occurrence of asynchronous events.",opts:["signal","message","mailbox","kernel"],ans:0},
+{q:"The most common technique used for protecting a critical section in Linux is the ______.",opts:["signal","atomic bitmap operation","atomic integer operation","spinlock"],ans:3},
+{q:"The ______ allows multiple threads to have simultaneous read-only access to an object protected by the lock.",opts:["barrier","condition variable","readers/writer lock","mutex"],ans:2},
+{q:"The ______ is useful in sending a signal to a thread indicating that a particular event has occurred.",opts:["mutex object","semaphore object","event object","waitable timer object"],ans:2}
+],
+C:[
+{q:"Which of the following best describes device virtualization?",opts:["Creating multiple copies of the same file","Partitioning a hard drive","Emulating physical devices in software for virtual machines","Removing hardware dependencies from drivers"],ans:2},
+{q:"The ______ is software that emulates hardware functionality for the guest operating system in a virtual machine.",opts:["Hypervisor","Kernel","Host BIOS","Bootloader"],ans:0},
+{q:"In a virtualized environment, the ______ provides virtual devices and facilitates I/O operations for guest operating systems.",opts:["VM Snapshot","Virtual Machine Monitor (VMM)","BIOS","File System"],ans:1},
+{q:"Which of the following manages and allocates hardware resources among virtual machines?",opts:["Virtual CPU","Resource Monitor","Hypervisor","Host OS"],ans:2},
+{q:"The component that allows multiple virtual machines to share hardware resources like CPU and memory is called:",opts:["Kernel","Bootloader","Hypervisor","Virtual Disk"],ans:2}
+],
+D:[
+{q:"A user account with unrestricted access to all system resources is typically referred to as a:",opts:["Guest","Root user","Masquerader","Limited user"],ans:1},
+{q:"An attacker with authorized access who intentionally violates security policy is best classified as a(n):",opts:["White-hat hacker","Insider threat","Masquerader","Worm"],ans:1},
+{q:"A ______ is a legitimate user who seizes control of a system and uses it to disable security controls or suppress audit data.",opts:["Clandestine user","Superuser","Trojan","Penetration tester"],ans:0},
+{q:"A ______ is an internal user who misuses their legitimate access to perform unauthorized actions.",opts:["Clandestine user","Masquerader","Misfeasor","Phisher"],ans:2},
+{q:"A ______ is an attacker who uses someone else's credentials to gain unauthorized access without having any legitimate rights to the system.",opts:["Masquerader","Misfeasor","Superuser","Insider"],ans:0}
+],
+E:[
+{q:"Main memory divided into a number of static partitions at system generation time is ______.",opts:["fixed partitioning","simple segmentation","dynamic partitioning","simple paging"],ans:0},
+{q:"Main memory divided into a number of equal size frames is the ______ technique.",opts:["simple paging","dynamic partitioning","fixed partitioning","virtual memory segmentation"],ans:0},
+{q:"With ______ a process is loaded by loading all of its segments into dynamic partitions that need not be contiguous.",opts:["simple paging","virtual memory segmentation","virtual memory paging","simple segmentations"],ans:3},
+{q:"One technique for overcoming external fragmentation is ______.",opts:["loading","compaction","relocation","partitioning"],ans:1},
+{q:"A ______ is a particular example of logical address in which the address is expressed as a location relative to some known point, usually a value in a processor register.",opts:["logical address","relative address","absolute address","physical address"],ans:1},
+{q:"The chunks of a process are known as ______.",opts:["pages","addresses","frames","segments"],ans:0},
+{q:"Available chunks of memory are known as ______.",opts:["frames","segments","addresses","pages"],ans:0},
+{q:"The concept of Memory Management satisfies certain system requirements including:",opts:["relocation","protection","physical organization","all of the above"],ans:3},
+{q:"In the Dynamic Partitioning technique of memory management, the placement algorithm that chooses the block that is closest in size to the request is called ______.",opts:["first-fit","best-fit","last-fit","next-fit"],ans:1},
+{q:"In the Dynamic Partitioning technique of memory management, the placement algorithm that scans memory from the location of the last placement and chooses the next available block that is large enough to satisfy the request is called ______.",opts:["best-fit","first-fit","next-fit","last-fit"],ans:2},
+{q:"A problem with the largely obsolete Fixed Partitioning memory management technique is that of:",opts:["allowing only a fixed number of processes","inefficient use of memory","internal fragmentation","all of the above"],ans:3},
+{q:"The page table for each process maintains ______.",opts:["the physical memory location of the process","the frame location for each page of the process","the page location for each frame of the process","the logical memory location of the process"],ans:1},
+{q:"In a system employing a paging scheme for memory management, wasted space is due to ______.",opts:["internal fragmentation","pages of different specified sizes","external fragmentation","frames of different specified sizes"],ans:0},
+{q:"In a system employing a segmentation scheme for memory management, a process is divided into ______.",opts:["one segment per thread","a number of threads","a number of segments which need not be of equal size","a number of segments which must be of equal size"],ans:2}
+],
+F:[
+{q:'What is the output of the following bash script when the user enters 5?<pre>#!/bin/bash\necho -n "Enter a number between 1 and 10: "\nread NUM\n((NUM += NUM))      # 5 + 5 =&gt; 10\n((NUM++))           # 10 + 1 =&gt; 11\n((NUM = $NUM - 3))  # 11 - 3 =&gt; ?\necho $NUM</pre>',opts:["5","8","10","11"],ans:1},
+{q:'Consider the following bash script. If the user enters <strong>0</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>',opts:["VALUE is less than 0","VALUE is greater than or equal to 0 and VALUE is less than or equal to 10","VALUE is greater than or equal to 0","VALUE is greater than 10"],ans:1},
+{q:'Consider the following bash script. If the user enters <strong>12</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>',opts:["VALUE is less than 0","VALUE is greater than or equal to 0 and VALUE is greater than 10","VALUE is less than or equal to 10","No output"],ans:1},
+{q:'Consider the following bash script. If the user enters <strong>-7</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>',opts:["VALUE is less than 0","VALUE is less than 0 and VALUE is less than or equal to 10","VALUE is greater than or equal to 0","VALUE is greater than 10"],ans:1},
+{q:'What is the output of the following command?<pre>echo $(hostname -a)</pre>',opts:["ip address","domain","hostname","hostname.domain.com"],ans:2},
+{q:'Consider the Python multiprocessing script below. What should LINE7 contain to produce the shown output?<pre>from multiprocessing import Process\n\ndef print_func(continent='Africa'):\n  print('The name of continent is : ', continent)\n\nif __name__ == "__main__":\n  LINE7\n  procs = []\n  proc = Process(target=print_func)\n  procs.append(proc)\n  proc.start()\n  for name in names:\n    proc = Process(target=print_func, args=(name,))\n    procs.append(proc)\n    proc.start()\n  for proc in procs:\n    proc.join()</pre>Expected output: Africa, Asia, America, Europe, Arctic, Antarctic',opts:["names=['Asia','America','Europe','Arctic','Antarctic']","names=['Asia','America','Europe']","names=['Africa','Asia','America','Europe','Arctic','Antarctic']","names=['Arctic','Antarctic']"],ans:0}
+]
+};
+
+const partNames={A:"CPU Scheduling",B:"Deadlock & Starvation",C:"Virtualization",D:"Security",E:"Memory Management",F:"Bash & Python"};
+const partDescs={A:"FCFS, Round Robin, SPN, Priority, and Preemptive scheduling",B:"Deadlock conditions, prevention, detection, and IPC mechanisms",C:"Hypervisors, VMM, virtual devices, and hardware emulation",D:"Root users, insider threats, masqueraders, and clandestine users",E:"Paging, segmentation, fragmentation, and placement algorithms",F:"Script output, conditionals, loops, and multiprocessing"};
+const partQuestionCounts={A:5,B:15,C:5,D:5,E:14,F:6};
+let currentPart='',currentQuestion=0,score=0,answered=[],partScores={A:null,B:null,C:null,D:null,E:null,F:null},partAnswered={A:[],B:[],C:[],D:[],E:[],F:[]};
+
+function showMenu(){hideAll();document.getElementById('menuCard').classList.remove('hidden');document.getElementById('progressBar').style.display='none';for(let p of['A','B','C','D','E','F']){let el=document.getElementById('menu-'+p.toLowerCase());if(partScores[p]!==null)el.classList.add('completed');}}
+function hideAll(){document.getElementById('startCard').classList.add('hidden');document.getElementById('menuCard').classList.add('hidden');document.getElementById('quizArea').classList.add('hidden');document.getElementById('partResults').classList.remove('show');document.getElementById('finalResultsCard').classList.remove('show');document.getElementById('partInfo').classList.add('hidden');}
+function startPart(part){currentPart=part;currentQuestion=0;score=0;answered=partAnswered[part]||[];if(answered.length===0)answered=new Array(partQuestionCounts[part]).fill(null);hideAll();document.getElementById('quizArea').classList.remove('hidden');document.getElementById('progressBar').style.display='block';document.getElementById('partInfo').classList.remove('hidden');document.getElementById('partTitle').textContent='Part '+part+': '+partNames[part];document.getElementById('partDesc').textContent=partDescs[part];renderQuestions(part);showQuestion(0);}
+function renderQuestions(part){let container=document.getElementById('questionsContainer'),qs=questionsData[part],html='';for(let i=0;i<qs.length;i++){let q=qs[i],qNum=i+1,optsHtml='';for(let j=0;j<q.opts.length;j++){let letter=String.fromCharCode(65+j);optsHtml+=`<div class="option" onclick="selectOption(this,${i},${j})"><span class="option-letter">${letter}</span>${q.opts[j]}</div>`;}html+=`<div class="question-card" data-q="${i}"><div class="question-text"><strong>Q${qNum}.</strong> ${q.q}</div><div class="options">${optsHtml}</div><div class="feedback" id="feedback-${part}-${i}"></div><div class="btn-group"><button class="back-btn" onclick="showMenu()">&#8592; Menu</button><button class="btn-next" id="btn-${part}-${i}" onclick="nextQuestion()">${i<qs.length-1?'Next Question &#8594;':'See Results'}</button></div></div>`;}container.innerHTML=html;}
+function showQuestion(idx){document.querySelectorAll('.question-card').forEach(c=>c.classList.remove('active'));let card=document.querySelector(`.question-card[data-q="${idx}"]`);if(card)card.classList.add('active');let total=questionsData[currentPart].length;document.getElementById('questionCounter').textContent=`Question ${idx+1} of ${total}`;updateProgress(idx,total);if(answered[idx]!==null)restoreAnsweredState(idx);}
+function restoreAnsweredState(idx){let card=document.querySelector(`.question-card[data-q="${idx}"]`),q=questionsData[currentPart][idx],opts=card.querySelectorAll('.option');opts.forEach(o=>o.classList.add('disabled'));opts[q.ans].classList.add('reveal-correct');let fb=document.getElementById(`feedback-${currentPart}-${idx}`);if(answered[idx]===true){fb.innerHTML='&#10004; Correct! Well done!';fb.className='feedback correct show';}else{fb.innerHTML=`&#10008; Incorrect. The correct answer is <strong>Option ${String.fromCharCode(65+q.ans)}</strong>.`;fb.className='feedback wrong show';}document.getElementById(`btn-${currentPart}-${idx}`).classList.add('show');}
+function updateProgress(idx,total){let pct=(idx/total)*100;document.getElementById('progressFill').style.width=pct+'%';}
+function selectOption(el,qIdx,optIdx){if(answered[qIdx]!==null)return;let q=questionsData[currentPart][qIdx],isCorrect=optIdx===q.ans;answered[qIdx]=isCorrect;partAnswered[currentPart]=answered;if(isCorrect)score++;let card=document.querySelector(`.question-card[data-q="${qIdx}"]`),opts=card.querySelectorAll('.option');opts.forEach(o=>o.classList.add('disabled'));if(isCorrect){el.classList.remove('disabled');el.classList.add('selected-correct');}else{el.classList.remove('disabled');el.classList.add('selected-wrong');opts[q.ans].classList.add('reveal-correct');}let fb=document.getElementById(`feedback-${currentPart}-${qIdx}`);if(isCorrect){fb.innerHTML='&#10004; Correct! Well done!';fb.className='feedback correct show';}else{fb.innerHTML=`&#10008; Incorrect. The correct answer is <strong>Option ${String.fromCharCode(65+q.ans)}</strong>.`;fb.className='feedback wrong show';}document.getElementById(`btn-${currentPart}-${qIdx}`).classList.add('show');}
+function nextQuestion(){currentQuestion++;let total=questionsData[currentPart].length;if(currentQuestion<total)showQuestion(currentQuestion);else showPartResults();}
+function showPartResults(){hideAll();document.getElementById('partResults').classList.add('show');document.getElementById('progressBar').style.display='none';let total=questionsData[currentPart].length,pct=Math.round((score/total)*100);partScores[currentPart]=score;document.getElementById('partResultsScore').textContent=score+' / '+total;let msg='',icon='';if(pct===100){msg='Perfect score! Outstanding work! &#127775;';icon='&#127941;';}else if(pct>=80){msg='Great job! You really know your stuff! &#128077;';icon='&#127942;';}else if(pct>=60){msg='Good effort! Keep learning! &#128170;';icon='&#128170;';}else if(pct>=40){msg='Not bad! Review the material and try again! &#128218;';icon='&#128218;';}else{msg='Keep studying! You\'ll do better next time! &#128293;';icon='&#128293;';}document.getElementById('partResultsIcon').innerHTML=icon;document.getElementById('partResultsMessage').innerHTML=msg;let qs=questionsData[currentPart],html='<h3 style="margin-bottom:12px;color:#2c3e50;">Question Breakdown</h3>';for(let i=0;i<total;i++){let status=answered[i]===true?'correct-ans':'wrong-ans',statusText=answered[i]===true?'&#10004; Correct':'&#10008; Wrong';html+=`<div class="score-item"><span>Q${i+1}: ${qs[i].opts[qs[i].ans]}</span><span class="${status}">${statusText}</span></div>`;}document.getElementById('partScoreBreakdown').innerHTML=html;let parts=['A','B','C','D','E','F'],idx=parts.indexOf(currentPart),nextBtn=document.getElementById('nextPartBtn');if(idx<parts.length-1){nextBtn.style.display='inline-block';nextBtn.textContent='Part '+parts[idx+1]+' &#8594;';nextBtn.onclick=()=>startPart(parts[idx+1]);}else nextBtn.style.display='none';}
+function showFinalResults(){hideAll();document.getElementById('finalResultsCard').classList.add('show');document.getElementById('progressBar').style.display='none';let totalScore=0,totalQs=0,html='<h3>Score by Part</h3>',parts=['A','B','C','D','E','F'];for(let p of parts){let count=partQuestionCounts[p];totalQs+=count;if(partScores[p]!==null){totalScore+=partScores[p];let pct=Math.round((partScores[p]/count)*100);html+=`<div class="part-score-row"><span>Part ${p}: ${partNames[p]}</span><span><strong>${partScores[p]}/${count}</strong> (${pct}%)</span></div>`;}else html+=`<div class="part-score-row"><span>Part ${p}: ${partNames[p]}</span><span style="color:#999">Not attempted</span></div>`;}let overallPct=Math.round((totalScore/totalQs)*100);html+=`<div class="part-score-row" style="border-top:2px solid #2c3e50;margin-top:10px;padding-top:15px"><span><strong>Overall</strong></span><span><strong>${totalScore}/${totalQs} (${overallPct}%)</strong></span></div>`;document.getElementById('finalBreakdown').innerHTML=html;document.getElementById('finalOverallScore').textContent=totalScore+' / '+totalQs;let msg='';if(overallPct===100)msg='Perfect score across all parts! Absolutely amazing! &#127775;&#127941;';else if(overallPct>=80)msg='Excellent work! You have mastered the material! &#128077;';else if(overallPct>=60)msg='Good effort! Keep practicing and you\'ll improve! &#128170;';else if(overallPct>=40)msg='Not bad! Review the lectures and try again! &#128218;';else msg='Keep studying! Every attempt helps you learn! &#128293;';document.getElementById('finalOverallMessage').innerHTML=msg;}
+function restartAll(){currentPart='';currentQuestion=0;score=0;answered=[];partScores={A:null,B:null,C:null,D:null,E:null,F:null};partAnswered={A:[],B:[],C:[],D:[],E:[],F:[]};document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('completed'));document.getElementById('finalResultsCard').classList.remove('show');showMenu();}
+</script>
+</body>
+</html>
