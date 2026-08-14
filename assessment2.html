@@ -66,9 +66,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f
 .part-info{text-align:center;padding:15px;background:#f0f7ff;border-radius:10px;margin-bottom:20px}
 .part-info h3{color:#2c3e50;margin-bottom:5px}
 .part-info p{color:#7f8c8d;font-size:14px}
-.back-btn{background:#7f8c8d;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;transition:background .3s ease;margin-right:10px}
-.back-btn:hover{background:#636e72}
-.btn-group{display:flex;justify-content:space-between;align-items:center;margin-top:15px}
 .final-results{background:#f8fafc;border-radius:12px;padding:25px;margin:20px 0}
 .final-results h3{color:#2c3e50;margin-bottom:15px;font-size:20px}
 .part-score-row{display:flex;justify-content:space-between;padding:10px 15px;border-bottom:1px solid #e0e7ef;font-size:15px}
@@ -92,13 +89,14 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f
 <div class="start-card" id="startCard">
 <div class="start-icon">&#128161;</div>
 <h2>Welcome to Assessment 2!</h2>
-<p>This assessment contains <strong>50 multiple-choice questions</strong> across <strong>6 parts</strong>:<br><br>
+<p>This assessment contains <strong>69 multiple-choice questions</strong> across <strong>7 parts</strong>:<br><br>
 &#9654; <strong>Part A</strong> - CPU Scheduling (5 Qs)<br>
 &#9654; <strong>Part B</strong> - Deadlock &amp; Starvation (15 Qs)<br>
 &#9654; <strong>Part C</strong> - Virtualization (5 Qs)<br>
 &#9654; <strong>Part D</strong> - Security (5 Qs)<br>
 &#9654; <strong>Part E</strong> - Memory Management (14 Qs)<br>
-&#9654; <strong>Part F</strong> - Programming: Bash &amp; Python (6 Qs)<br><br>
+&#9654; <strong>Part F</strong> - Bash &amp; Python (15 Qs)<br>
+&#9654; <strong>Part G</strong> - Threading, Cloud &amp; Sustainability (10 Qs)<br><br>
 Select the best answer for each question. You will see instant feedback after each answer!</p>
 <button class="btn-start" onclick="showMenu()">Get Started</button>
 </div>
@@ -113,7 +111,8 @@ Select the best answer for each question. You will see instant feedback after ea
 <div class="menu-item" id="menu-c" onclick="startPart('C')"><h3>Part C: Virtualization</h3><p>Hypervisors, VMM, virtual devices, and hardware emulation.</p><span class="badge">5 Questions</span></div>
 <div class="menu-item" id="menu-d" onclick="startPart('D')"><h3>Part D: Security</h3><p>Root users, insider threats, masqueraders, and clandestine users.</p><span class="badge">5 Questions</span></div>
 <div class="menu-item" id="menu-e" onclick="startPart('E')"><h3>Part E: Memory Management</h3><p>Paging, segmentation, fragmentation, and placement algorithms.</p><span class="badge">14 Questions</span></div>
-<div class="menu-item" id="menu-f" onclick="startPart('F')"><h3>Part F: Bash &amp; Python</h3><p>Script output, conditionals, loops, and multiprocessing.</p><span class="badge">6 Questions</span></div>
+<div class="menu-item" id="menu-f" onclick="startPart('F')"><h3>Part F: Bash &amp; Python</h3><p>Script output, conditionals, loops, multiprocessing, and shell commands.</p><span class="badge">15 Questions</span></div>
+<div class="menu-item" id="menu-g" onclick="startPart('G')"><h3>Part G: Threading, Cloud &amp; Sustainability</h3><p>Python threading, parallelism, cloud models, and UN SDGs.</p><span class="badge">10 Questions</span></div>
 <div class="menu-item" style="background:#e8f5e9;border-color:#27ae60" id="menu-final" onclick="showFinalResults()"><h3>&#127942; See Final Results</h3><p>View your combined score across all completed parts.</p><span class="badge" style="background:#27ae60">Overall Score</span></div>
 </div>
 </div>
@@ -129,87 +128,184 @@ Select the best answer for each question. You will see instant feedback after ea
 
 <script>
 const questionsData={
-A:[
-{q:"Which scheduling algorithm can cause starvation if lower-priority processes are continuously ignored?",opts:["Round Robin","FCFS","Preemptive Priority Scheduling","SPN"],ans:2},
-{q:"Which of the following is a disadvantage of the First-Come, First-Served (FCFS) scheduling algorithm?",opts:["Leads to lower device and CPU utilization thereby decreasing the efficiency of the system","Requires knowledge of burst time","High overhead due to frequent context switching","Inefficient memory usage"],ans:0},
-{q:"In which scheduling policy is the process with the shortest estimated run time selected next?",opts:["FCFS","SPN","Round Robin","Priority Scheduling"],ans:1},
-{q:"Which CPU scheduling algorithm assigns a fixed time slice to each process in a cyclic order?",opts:["Round Robin","FCFS","SPN","Priority Scheduling"],ans:0},
-{q:"Which of the following scheduling policies allows the operating system to interrupt a running process and place it back in the Ready state?",opts:["FIFO","FCFS","Non-preemptive","Preemptive"],ans:3}
-],
-B:[
-{q:"A set of processes is ______ when each process in the set is blocked awaiting an event that can only be triggered by another blocked process in the set.",opts:["spinlocked","stagnant","preempted","deadlocked"],ans:3},
-{q:"Examples of ______ include processors, I/O channels, main and secondary memory, devices, and data structures such as files, databases, and semaphores.",opts:["regional resources","joint resources","reusable resources","consumable resources"],ans:2},
-{q:"With ______ only one process may use a resource at a time and no process may access a resource unit that has been allocated to another process.",opts:["hold and wait","mutual exclusion","no preemption","circular wait"],ans:1},
-{q:"A closed chain of processes exists, such that each process holds at least one resource needed by the next process in the chain. This is the condition of ______.",opts:["no preemption","mutual exclusion","circular wait","hold and wait"],ans:2},
-{q:"Once the processes have progressed into the ______, those processes will deadlock.",opts:["fatal region","regional resources","spinlock","hold and wait"],ans:0},
-{q:"The strategy of deadlock ______ is to design a system in such a way that the possibility of deadlock is excluded.",opts:["prevention","detection","diversion","avoidance"],ans:0},
-{q:"The ______ condition can be prevented by requiring that a process request all of its required resources at one time and blocking the process until all requests can be granted simultaneously.",opts:["mutual exclusion","hold and wait","circular wait","no preemption"],ans:1},
-{q:"The fastest form of interprocess communication provided in UNIX is ______.",opts:["shared memory","message","pipe","semaphore"],ans:0},
-{q:"The ______ condition can be prevented by defining a linear ordering of resource types.",opts:["hold and wait","no preemption","mutual exclusion","circular wait"],ans:3},
-{q:"Requested resources are granted to processes whenever possible with ______.",opts:["preemption","deadlock detection","mutual exclusion","deadlock avoidance"],ans:1},
-{q:"One of the most significant contributions of UNIX to the development of operating systems is the ______.",opts:["semaphore","shared memory","message","pipe"],ans:3},
-{q:"A ______ is a software mechanism that informs a process of the occurrence of asynchronous events.",opts:["signal","message","mailbox","kernel"],ans:0},
-{q:"The most common technique used for protecting a critical section in Linux is the ______.",opts:["signal","atomic bitmap operation","atomic integer operation","spinlock"],ans:3},
-{q:"The ______ allows multiple threads to have simultaneous read-only access to an object protected by the lock.",opts:["barrier","condition variable","readers/writer lock","mutex"],ans:2},
-{q:"The ______ is useful in sending a signal to a thread indicating that a particular event has occurred.",opts:["mutex object","semaphore object","event object","waitable timer object"],ans:2}
-],
-C:[
-{q:"Which of the following best describes device virtualization?",opts:["Creating multiple copies of the same file","Partitioning a hard drive","Emulating physical devices in software for virtual machines","Removing hardware dependencies from drivers"],ans:2},
-{q:"The ______ is software that emulates hardware functionality for the guest operating system in a virtual machine.",opts:["Hypervisor","Kernel","Host BIOS","Bootloader"],ans:0},
-{q:"In a virtualized environment, the ______ provides virtual devices and facilitates I/O operations for guest operating systems.",opts:["VM Snapshot","Virtual Machine Monitor (VMM)","BIOS","File System"],ans:1},
-{q:"Which of the following manages and allocates hardware resources among virtual machines?",opts:["Virtual CPU","Resource Monitor","Hypervisor","Host OS"],ans:2},
-{q:"The component that allows multiple virtual machines to share hardware resources like CPU and memory is called:",opts:["Kernel","Bootloader","Hypervisor","Virtual Disk"],ans:2}
-],
-D:[
-{q:"A user account with unrestricted access to all system resources is typically referred to as a:",opts:["Guest","Root user","Masquerader","Limited user"],ans:1},
-{q:"An attacker with authorized access who intentionally violates security policy is best classified as a(n):",opts:["White-hat hacker","Insider threat","Masquerader","Worm"],ans:1},
-{q:"A ______ is a legitimate user who seizes control of a system and uses it to disable security controls or suppress audit data.",opts:["Clandestine user","Superuser","Trojan","Penetration tester"],ans:0},
-{q:"A ______ is an internal user who misuses their legitimate access to perform unauthorized actions.",opts:["Clandestine user","Masquerader","Misfeasor","Phisher"],ans:2},
-{q:"A ______ is an attacker who uses someone else's credentials to gain unauthorized access without having any legitimate rights to the system.",opts:["Masquerader","Misfeasor","Superuser","Insider"],ans:0}
-],
-E:[
-{q:"Main memory divided into a number of static partitions at system generation time is ______.",opts:["fixed partitioning","simple segmentation","dynamic partitioning","simple paging"],ans:0},
-{q:"Main memory divided into a number of equal size frames is the ______ technique.",opts:["simple paging","dynamic partitioning","fixed partitioning","virtual memory segmentation"],ans:0},
-{q:"With ______ a process is loaded by loading all of its segments into dynamic partitions that need not be contiguous.",opts:["simple paging","virtual memory segmentation","virtual memory paging","simple segmentations"],ans:3},
-{q:"One technique for overcoming external fragmentation is ______.",opts:["loading","compaction","relocation","partitioning"],ans:1},
-{q:"A ______ is a particular example of logical address in which the address is expressed as a location relative to some known point, usually a value in a processor register.",opts:["logical address","relative address","absolute address","physical address"],ans:1},
-{q:"The chunks of a process are known as ______.",opts:["pages","addresses","frames","segments"],ans:0},
-{q:"Available chunks of memory are known as ______.",opts:["frames","segments","addresses","pages"],ans:0},
-{q:"The concept of Memory Management satisfies certain system requirements including:",opts:["relocation","protection","physical organization","all of the above"],ans:3},
-{q:"In the Dynamic Partitioning technique of memory management, the placement algorithm that chooses the block that is closest in size to the request is called ______.",opts:["first-fit","best-fit","last-fit","next-fit"],ans:1},
-{q:"In the Dynamic Partitioning technique of memory management, the placement algorithm that scans memory from the location of the last placement and chooses the next available block that is large enough to satisfy the request is called ______.",opts:["best-fit","first-fit","next-fit","last-fit"],ans:2},
-{q:"A problem with the largely obsolete Fixed Partitioning memory management technique is that of:",opts:["allowing only a fixed number of processes","inefficient use of memory","internal fragmentation","all of the above"],ans:3},
-{q:"The page table for each process maintains ______.",opts:["the physical memory location of the process","the frame location for each page of the process","the page location for each frame of the process","the logical memory location of the process"],ans:1},
-{q:"In a system employing a paging scheme for memory management, wasted space is due to ______.",opts:["internal fragmentation","pages of different specified sizes","external fragmentation","frames of different specified sizes"],ans:0},
-{q:"In a system employing a segmentation scheme for memory management, a process is divided into ______.",opts:["one segment per thread","a number of threads","a number of segments which need not be of equal size","a number of segments which must be of equal size"],ans:2}
-],
-F:[
-{q:`What is the output of the following bash script when the user enters 5?<pre>#!/bin/bash\necho -n "Enter a number between 1 and 10: "\nread NUM\n((NUM += NUM))      # 5 + 5 =&gt; 10\n((NUM++))           # 10 + 1 =&gt; 11\n((NUM = $NUM - 3))  # 11 - 3 =&gt; 8\necho $NUM</pre>`,opts:["5","8","10","11"],ans:1},
-{q:`Consider the following bash script. If the user enters <strong>0</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>`,opts:["VALUE is less than 0","VALUE is greater than or equal to 0 and VALUE is less than or equal to 10","VALUE is greater than or equal to 0","VALUE is greater than 10"],ans:1},
-{q:`Consider the following bash script. If the user enters <strong>12</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>`,opts:["VALUE is less than 0","VALUE is greater than or equal to 0 and VALUE is greater than 10","VALUE is less than or equal to 10","No output"],ans:1},
-{q:`Consider the following bash script. If the user enters <strong>-7</strong>, which messages will be printed?<pre>#!/bin/bash\nread VALUE\nif [ "$VALUE" -lt 0 ]; then\n  echo "VALUE is less than 0"\nelse\n  echo "VALUE is greater than or equal to 0"\nfi\nif [ "$VALUE" -le 10 ]; then\n  echo "VALUE is less than or equal to 10"\nelse\n  echo "VALUE is greater than 10"\nfi</pre>`,opts:["VALUE is less than 0","VALUE is less than 0 and VALUE is less than or equal to 10","VALUE is greater than or equal to 0","VALUE is greater than 10"],ans:1},
-{q:`What is the output of the following command?<pre>echo $(hostname -a)</pre>`,opts:["ip address","domain","hostname","hostname.domain.com"],ans:2},
-{q:`Consider the Python multiprocessing script below. What should LINE7 contain to produce the shown output?<pre>from multiprocessing import Process\n\ndef print_func(continent='Africa'):\n  print('The name of continent is : ', continent)\n\nif __name__ == "__main__":\n  LINE7\n  procs = []\n  proc = Process(target=print_func)\n  procs.append(proc)\n  proc.start()\n  for name in names:\n    proc = Process(target=print_func, args=(name,))\n    procs.append(proc)\n    proc.start()\n  for proc in procs:\n    proc.join()</pre>Expected output: Africa, Asia, America, Europe, Arctic, Antarctic`,opts:["names=['Asia','America','Europe','Arctic','Antarctic']","names=['Asia','America','Europe']","names=['Africa','Asia','America','Europe','Arctic','Antarctic']","names=['Arctic','Antarctic']"],ans:0}
-]
+A:[{q:`Which scheduling algorithm has the highest average turnaround time?`,opts:["Shortest Process Next (SPN)", "First-Come, First-Served (FCFS)", "Round Robin", "Priority Scheduling"],ans:1}, {q:`A set of processes is ______ if each process is blocked waiting for a resource held by another process.`,opts:["Starving", "Mutual", "Deadlocked", "Safe"],ans:2}, {q:`In Round Robin scheduling with a small time quantum, what is a major advantage?`,opts:["Low overhead", "Improved response time for interactive systems", "No context switching", "Highest throughput"],ans:1}, {q:`Which resource allocation graph configuration indicates deadlock?`,opts:["A cycle with single instance resources", "No edges between processes", "All resources are free", "Only request edges exist"],ans:0}, {q:`Which algorithm always results in the minimum average waiting time?`,opts:["FCFS", "Round Robin", "Shortest Job First", "Priority"],ans:2}],
+B:[{q:`Which of the following is NOT one of the four conditions for deadlock?`,opts:["Mutual Exclusion", "Hold and Wait", "Preemption", "Circular Wait"],ans:2}, {q:`Deadlock prevention works by ensuring that at least one of the four necessary conditions does not hold. True or False?`,opts:["True", "False"],ans:0}, {q:`The Banker's algorithm is used for:`,opts:["Deadlock prevention", "Deadlock avoidance", "Deadlock detection", "Starvation prevention"],ans:1}, {q:`A process is in a state of ______ if it is perpetually denied access to a resource it needs.`,opts:["Deadlock", "Starvation", "Mutual exclusion", "Critical section"],ans:1}, {q:`Which approach to deadlock requires that the operating system be given advance information about the maximum resource requirements of each process?`,opts:["Deadlock prevention", "Deadlock avoidance", "Deadlock detection", "Deadlock ignorance"],ans:1}, {q:`Which IPC mechanism uses a shared memory buffer with fixed-size slots?`,opts:["Message passing", "Shared memory", "Pipes", "Message queue"],ans:3}, {q:`A safe state is one in which:`,opts:["Deadlock has occurred", "There exists at least one sequence of execution that allows all processes to complete", "No process is waiting", "All resources are allocated"],ans:1}, {q:`Circular wait can be prevented by:`,opts:["Requiring processes to request resources in increasing order", "Using preemption", "Using timeout", "Using priority inheritance"],ans:0}, {q:`What is the primary disadvantage of deadlock detection and recovery?`,opts:["It requires knowing all resource requirements in advance", "It is complex to implement", "It requires terminating processes or preempting resources", "It prevents all deadlocks"],ans:2}, {q:`Starvation can occur even if there is no deadlock. True or False?`,opts:["True", "False"],ans:0}, {q:`In resource allocation graphs, a directed edge from a process to a resource type indicates:`,opts:["The process holds an instance of that resource", "The process is waiting for an instance of that resource", "The resource is free", "The process has released the resource"],ans:1}, {q:`Which technique guarantees that a process waiting for a resource will eventually get it?`,opts:["Deadlock prevention", "Aging", "Resource preemption", "Banker's algorithm"],ans:1}, {q:`If all resources have exactly one instance, a cycle in the resource allocation graph is:`,opts:["A necessary and sufficient condition for deadlock", "Only a necessary condition", "Only a sufficient condition", "Neither necessary nor sufficient"],ans:0}, {q:`The dining philosophers problem is a classic example of:`,opts:["Deadlock and starvation", "Paging", "Memory segmentation", "CPU scheduling"],ans:0}, {q:`A wait-for graph is used for:`,opts:["Detecting deadlock when resources have single instances", "Preventing deadlock", "Scheduling processes", "Memory allocation"],ans:0}],
+C:[{q:`What does a Type 1 hypervisor run on?`,opts:["Host operating system", "Bare metal", "Virtual machine", "Container"],ans:1}, {q:`Which of the following is NOT a type of virtualization?`,opts:["Hardware virtualization", "Application virtualization", "Network virtualization", "Optical virtualization"],ans:3}, {q:`A virtual machine monitor (VMM) is also known as a:`,opts:["Kernel", "Hypervisor", "Driver", "Emulator"],ans:1}, {q:`Paravirtualization requires:`,opts:["No modifications to the guest OS", "A modified guest OS", "Specialized hardware", "A separate host OS"],ans:1}, {q:`Hardware-assisted virtualization uses special CPU extensions such as:`,opts:["ARM and MIPS", "Intel VT-x and AMD-V", "SSE and AVX", "PCI and USB"],ans:1}],
+D:[{q:`In Linux, which user has full system privileges?`,opts:["Guest user", "Standard user", "Root user", "Anonymous user"],ans:2}, {q:`Which of the following is an example of an insider threat?`,opts:["A hacker from outside the organization", "A malicious employee", "A computer virus", "A DDoS attack"],ans:1}, {q:`A masquerader is someone who:`,opts:["Uses legitimate credentials without authorization", "Gains unauthorized access by pretending to be an authorized user", "Accidentally accesses restricted data", "Is an authorized system administrator"],ans:1}, {q:`A clandestine user is:`,opts:["A user who hides their identity while accessing the system", "A user who has temporary access", "A user who has forgotten their password", "A user with read-only permissions"],ans:0}, {q:`Which security principle states that users should only have the minimum access necessary?`,opts:["Least privilege", "Defense in depth", "Separation of duties", "Fail-safe defaults"],ans:0}],
+E:[{q:`What is the purpose of paging in memory management?`,opts:["To allocate memory in fixed-size blocks called frames", "To merge adjacent free partitions", "To sort memory addresses", "To compress memory contents"],ans:0}, {q:`Which memory allocation strategy searches for the smallest free block that fits the request?`,opts:["First fit", "Best fit", "Worst fit", "Next fit"],ans:1}, {q:`In segmentation, memory is divided into:`,opts:["Equal-sized pages", "Variable-sized segments based on program structure", "Fixed-size blocks of 4KB each", "Continuous blocks only"],ans:1}, {q:`Fragmentation that occurs when free memory is divided into small, non-contiguous blocks is called:`,opts:["Internal fragmentation", "External fragmentation", "Segmentation fault", "Page fault"],ans:1}, {q:`A page fault occurs when:`,opts:["The requested page is not in physical memory", "The page is too large", "The page table is empty", "Memory is full"],ans:0}, {q:`Virtual memory allows:`,opts:["Processes to use more memory than physically available", "Faster CPU execution", "Direct hardware access", "Smaller executable files"],ans:0}, {q:`Which placement algorithm has the worst external fragmentation over time?`,opts:["First fit", "Best fit", "Worst fit", "Buddy system"],ans:1}, {q:`Thrashing in virtual memory systems occurs when:`,opts:["A process spends more time paging than executing", "Memory is completely full", "The CPU is idle", "All pages are in memory"],ans:0}, {q:`Which of the following is a benefit of paging?`,opts:["Eliminates all fragmentation", "Eliminates external fragmentation", "Eliminates internal fragmentation", "Increases memory access speed"],ans:1}, {q:`The translation lookaside buffer (TLB) is used to:`,opts:["Speed up virtual-to-physical address translation", "Store swapped pages", "Cache disk blocks", "Manage free frames"],ans:0}, {q:`Internal fragmentation occurs in:`,opts:["Paging", "Segmentation", "Dynamic partitioning", "Buddy system"],ans:0}, {q:`Which replacement algorithm replaces the page that will not be used for the longest period?`,opts:["FIFO", "LRU", "Optimal", "Clock"],ans:2}, {q:`Segmented paging combines:`,opts:["Fixed-size segments and variable-size pages", "Variable-size segments and fixed-size pages", "Variable-size segments and variable-size pages", "Fixed-size segments and fixed-size pages"],ans:1}, {q:`In demand paging, a page is brought into memory:`,opts:["When the process starts", "When it is first referenced", "At regular intervals", "When memory is empty"],ans:1}],
+F:[{q:`What is the output of this script?<pre>#!/bin/bash\necho $((5+3*2))</pre>`,opts:["16", "11", "13", "10"],ans:1}, {q:`What is the output of this script?<pre>#!/bin/bash\nx=0\nif [ $x -ne 0 ]\nthen\n  echo 'odd'\nelse\n  echo 'even'\nfi</pre>`,opts:["odd", "even", "0", "error"],ans:1}, {q:`What is the output of this script?<pre>#!/bin/bash\nfor i in 1 2 3 4 5\ndo\n  if [ $((i % 2)) -eq 0 ]\n  then\n    echo $i\n  fi\ndone</pre>`,opts:["1 3 5", "2 4", "1 2 3 4 5", "2 3 4"],ans:1}, {q:`What is the output of this script?<pre>#!/bin/bash\nnumber=-7\nif [ $number -gt 0 ]\nthen\n  echo 'positive'\nelif [ $number -lt 0 ]\nthen\n  echo 'negative'\nelse\n  echo 'zero'\nfi</pre>`,opts:["positive", "negative", "zero", "error"],ans:1}, {q:`What is the output of this command?<pre>echo $(hostname -a)</pre>`,opts:["ip address", "hostname", "domain", "hostname.domain"],ans:1}, {q:`What is the output of this Python3 code?<pre>import multiprocessing\n\ndef my_func():\n  return 'hello'\n\np=multiprocessing.Process(target=my_func)\np.start()\np.join()\nprint([name for name in dir(multiprocessing) if not name.startswith('_')])</pre>`,opts:["List of methods in multiprocessing module", "Error: name is not defined", "Error: dir is not defined", "Error: target is not defined"],ans:0}, {q:`What is the output of this command?<pre>echo $(hostname -i)</pre>`,opts:["ip address", "hostname", "domain", "hostname.domain"],ans:0}, {q:`What is the output of this command?<pre>echo $(hostname -f)</pre>`,opts:["ip address", "hostname", "hostname.domain", "domain"],ans:2}, {q:`Consider the Python code shown. It uses <code>t0 = time.time()</code> but does not import <code>time</code>. What error will occur?`,opts:["NameError: name 'time' is not defined", "NameError: name 't1' is not defined", "NameError: name 't0' is not defined", "NameError: name 'totalTime' is not defined"],ans:0}, {q:`Consider the Python multiprocessing code shown. The <code>import time</code> line appears before <code>import multiprocessing</code>, but <code>multiprocessing.Process</code> is used. What error will occur?`,opts:["NameError: name 'multiprocessing' is not defined", "NameError: name 'process' is not defined", "NameError: name 'executeProcess' is not defined", "NameError: name 'processes' is not defined"],ans:0}, {q:`What is the output of this command?<pre>printf "194.168.2.24" | cut -f3 -d '.'</pre>`,opts:["194", "168", "2", "24"],ans:2}, {q:`What is the output of this command?<pre>printf "194.168.2.24" | cut -f4 -d '.'</pre>`,opts:["194", "168", "2", "24"],ans:3}, {q:`What is the output of this command?<pre>printf "194.168.2.24" | cut -f1 -d '.'</pre>`,opts:["194", "168", "2", "24"],ans:0}, {q:`What is the output of this command?<pre>printf "194.168.2.24" | cut -f2 -d '.'</pre>`,opts:["194", "168", "2", "24"],ans:1}, {q:`What are the contents of <code>c.txt</code> after running this command?<pre>printf "4\\n1\\n2\\n3\\n" | sort -r > c.txt</pre>`,opts:["4, 3, 2, 1", "4, 1, 2, 3", "1, 2, 3, 4", "n3, n2, n1"],ans:0}],
+G:[{q:`Consider the Python threading program shown. The main program creates and starts 3 threads. Including the main program itself, how many threads are executing in total?`,opts:["3", "4", "2", "5"],ans:1}, {q:`In the threading program, if the output shows Thread 0 finishing immediately, Thread 1 finishing 2 seconds later, and Thread 2 finishing 4 seconds later (all starting at the same time), what is the <code>time.sleep()</code> argument?`,opts:["name", "2*name", "name+1", "name*2+1"],ans:1}, {q:`In the threading program, if the output shows all threads starting at t=0, with Thread 0 finishing at t=2, Thread 1 at t=4, and Thread 2 at t=6, what is the <code>time.sleep()</code> argument?`,opts:["2*name", "name+2", "2*(name+1)", "name*3"],ans:2}, {q:`Four tasks run on 2 CPU cores as shown in the diagram. Tasks 1 and 2 share Core 1 (alternating), Tasks 3 and 4 share Core 2 (alternating). Which statement is correct?`,opts:["Task 2 and Task 3 execute in parallel (on different cores at the same time)", "Task 3 and Task 4 execute in parallel (on the same core at the same time)", "Task 1 and Task 2 can never overlap in time", "Four cores are needed for any concurrent operation"],ans:0}, {q:`Consider this Python code:<pre>import multiprocessing as mp\ndef operation(x):\n  return x**4\npool = mp.Pool(processes=4)\nresults = pool.map(operation, range(1,5))\nprint(results)</pre>What is the output?`,opts:["[1, 8, 27, 64]", "[1, 16, 81, 256]", "[0, 1, 16, 81]", "[1, 4, 9, 16]"],ans:1}, {q:`Consider this Python code:<pre>import multiprocessing as mp\ndef operation(x):\n  return x**2 + 1\npool = mp.Pool(processes=4)\nresults = pool.map(operation, range(1,5))\nprint(results)</pre>What is the output?`,opts:["[2, 5, 10, 17]", "[1, 4, 9, 16]", "[2, 6, 10, 18]", "[1, 5, 10, 17]"],ans:0}, {q:`What does IaaS stand for in cloud computing?`,opts:["Internet as a Service", "Infrastructure as a Service", "Information as a Service", "Integration as a Service"],ans:1}, {q:`What does PaaS stand for in cloud computing?`,opts:["Platform as a Service", "Product as a Service", "Program as a Service", "Process as a Service"],ans:0}, {q:`What does SaaS stand for in cloud computing?`,opts:["Software as a Service", "System as a Service", "Security as a Service", "Storage as a Service"],ans:0}, {q:`Which UN Sustainable Development Goal focuses on eliminating poverty worldwide?`,opts:["Goal 2: Zero Hunger", "Goal 1: No Poverty", "Goal 3: Good Health", "Goal 4: Quality Education"],ans:1}]
 };
 
-const partNames={A:"CPU Scheduling",B:"Deadlock & Starvation",C:"Virtualization",D:"Security",E:"Memory Management",F:"Bash & Python"};
-const partDescs={A:"FCFS, Round Robin, SPN, Priority, and Preemptive scheduling",B:"Deadlock conditions, prevention, detection, and IPC mechanisms",C:"Hypervisors, VMM, virtual devices, and hardware emulation",D:"Root users, insider threats, masqueraders, and clandestine users",E:"Paging, segmentation, fragmentation, and placement algorithms",F:"Script output, conditionals, loops, and multiprocessing"};
-const partQuestionCounts={A:5,B:15,C:5,D:5,E:14,F:6};
-let currentPart='',currentQuestion=0,score=0,answered=[],partScores={A:null,B:null,C:null,D:null,E:null,F:null},partAnswered={A:[],B:[],C:[],D:[],E:[],F:[]};
+const partNames={A:"CPU Scheduling",B:"Deadlock & Starvation",C:"Virtualization",D:"Security",E:"Memory Management",F:"Bash & Python",G:"Threading, Cloud & Sustainability"};
+let currentPart="",currentQuestion=0,score=0,partScores={},partAnswers={};
 
-function showMenu(){hideAll();document.getElementById('menuCard').classList.remove('hidden');document.getElementById('progressBar').style.display='none';for(let p of['A','B','C','D','E','F']){let el=document.getElementById('menu-'+p.toLowerCase());if(partScores[p]!==null)el.classList.add('completed');}}
-function hideAll(){document.getElementById('startCard').classList.add('hidden');document.getElementById('menuCard').classList.add('hidden');document.getElementById('quizArea').classList.add('hidden');document.getElementById('partResults').classList.remove('show');document.getElementById('finalResultsCard').classList.remove('show');document.getElementById('partInfo').classList.add('hidden');}
-function startPart(part){currentPart=part;currentQuestion=0;score=0;answered=partAnswered[part]||[];if(answered.length===0)answered=new Array(partQuestionCounts[part]).fill(null);hideAll();document.getElementById('quizArea').classList.remove('hidden');document.getElementById('progressBar').style.display='block';document.getElementById('partInfo').classList.remove('hidden');document.getElementById('partTitle').textContent='Part '+part+': '+partNames[part];document.getElementById('partDesc').textContent=partDescs[part];renderQuestions(part);showQuestion(0);}
-function renderQuestions(part){let container=document.getElementById('questionsContainer'),qs=questionsData[part],html='';for(let i=0;i<qs.length;i++){let q=qs[i],qNum=i+1,optsHtml='';for(let j=0;j<q.opts.length;j++){let letter=String.fromCharCode(65+j);optsHtml+=`<div class="option" onclick="selectOption(this,${i},${j})"><span class="option-letter">${letter}</span>${q.opts[j]}</div>`;}html+=`<div class="question-card" data-q="${i}"><div class="question-text"><strong>Q${qNum}.</strong> ${q.q}</div><div class="options">${optsHtml}</div><div class="feedback" id="feedback-${part}-${i}"></div><div class="btn-group"><button class="back-btn" onclick="showMenu()">&#8592; Menu</button><button class="btn-next" id="btn-${part}-${i}" onclick="nextQuestion()">${i<qs.length-1?'Next Question &#8594;':'See Results'}</button></div></div>`;}container.innerHTML=html;}
-function showQuestion(idx){document.querySelectorAll('.question-card').forEach(c=>c.classList.remove('active'));let card=document.querySelector(`.question-card[data-q="${idx}"]`);if(card)card.classList.add('active');let total=questionsData[currentPart].length;document.getElementById('questionCounter').textContent=`Question ${idx+1} of ${total}`;updateProgress(idx,total);if(answered[idx]!==null)restoreAnsweredState(idx);}
-function restoreAnsweredState(idx){let card=document.querySelector(`.question-card[data-q="${idx}"]`),q=questionsData[currentPart][idx],opts=card.querySelectorAll('.option');opts.forEach(o=>o.classList.add('disabled'));opts[q.ans].classList.add('reveal-correct');let fb=document.getElementById(`feedback-${currentPart}-${idx}`);if(answered[idx]===true){fb.innerHTML='&#10004; Correct! Well done!';fb.className='feedback correct show';}else{fb.innerHTML=`&#10008; Incorrect. The correct answer is <strong>Option ${String.fromCharCode(65+q.ans)}</strong>.`;fb.className='feedback wrong show';}document.getElementById(`btn-${currentPart}-${idx}`).classList.add('show');}
-function updateProgress(idx,total){let pct=(idx/total)*100;document.getElementById('progressFill').style.width=pct+'%';}
-function selectOption(el,qIdx,optIdx){if(answered[qIdx]!==null)return;let q=questionsData[currentPart][qIdx],isCorrect=optIdx===q.ans;answered[qIdx]=isCorrect;partAnswered[currentPart]=answered;if(isCorrect)score++;let card=document.querySelector(`.question-card[data-q="${qIdx}"]`),opts=card.querySelectorAll('.option');opts.forEach(o=>o.classList.add('disabled'));if(isCorrect){el.classList.remove('disabled');el.classList.add('selected-correct');}else{el.classList.remove('disabled');el.classList.add('selected-wrong');opts[q.ans].classList.add('reveal-correct');}let fb=document.getElementById(`feedback-${currentPart}-${qIdx}`);if(isCorrect){fb.innerHTML='&#10004; Correct! Well done!';fb.className='feedback correct show';}else{fb.innerHTML=`&#10008; Incorrect. The correct answer is <strong>Option ${String.fromCharCode(65+q.ans)}</strong>.`;fb.className='feedback wrong show';}document.getElementById(`btn-${currentPart}-${qIdx}`).classList.add('show');}
-function nextQuestion(){currentQuestion++;let total=questionsData[currentPart].length;if(currentQuestion<total)showQuestion(currentQuestion);else showPartResults();}
-function showPartResults(){hideAll();document.getElementById('partResults').classList.add('show');document.getElementById('progressBar').style.display='none';let total=questionsData[currentPart].length,pct=Math.round((score/total)*100);partScores[currentPart]=score;document.getElementById('partResultsScore').textContent=score+' / '+total;let msg='',icon='';if(pct===100){msg='Perfect score! Outstanding work! &#127775;';icon='&#127941;';}else if(pct>=80){msg='Great job! You really know your stuff! &#128077;';icon='&#127942;';}else if(pct>=60){msg='Good effort! Keep learning! &#128170;';icon='&#128170;';}else if(pct>=40){msg='Not bad! Review the material and try again! &#128218;';icon='&#128218;';}else{msg="Keep studying! You will do better next time! &#128293;";icon='&#128293;';}document.getElementById('partResultsIcon').innerHTML=icon;document.getElementById('partResultsMessage').innerHTML=msg;let qs=questionsData[currentPart],html='<h3 style="margin-bottom:12px;color:#2c3e50;">Question Breakdown</h3>';for(let i=0;i<total;i++){let status=answered[i]===true?'correct-ans':'wrong-ans',statusText=answered[i]===true?'&#10004; Correct':'&#10008; Wrong';html+=`<div class="score-item"><span>Q${i+1}: ${qs[i].opts[qs[i].ans]}</span><span class="${status}">${statusText}</span></div>`;}document.getElementById('partScoreBreakdown').innerHTML=html;let parts=['A','B','C','D','E','F'],idx=parts.indexOf(currentPart),nextBtn=document.getElementById('nextPartBtn');if(idx<parts.length-1){nextBtn.style.display='inline-block';nextBtn.textContent='Part '+parts[idx+1]+' &#8594;';nextBtn.onclick=()=>startPart(parts[idx+1]);}else nextBtn.style.display='none';}
-function showFinalResults(){hideAll();document.getElementById('finalResultsCard').classList.add('show');document.getElementById('progressBar').style.display='none';let totalScore=0,totalQs=0,html='<h3>Score by Part</h3>',parts=['A','B','C','D','E','F'];for(let p of parts){let count=partQuestionCounts[p];totalQs+=count;if(partScores[p]!==null){totalScore+=partScores[p];let pct=Math.round((partScores[p]/count)*100);html+=`<div class="part-score-row"><span>Part ${p}: ${partNames[p]}</span><span><strong>${partScores[p]}/${count}</strong> (${pct}%)</span></div>`;}else html+=`<div class="part-score-row"><span>Part ${p}: ${partNames[p]}</span><span style="color:#999">Not attempted</span></div>`;}let overallPct=Math.round((totalScore/totalQs)*100);html+=`<div class="part-score-row" style="border-top:2px solid #2c3e50;margin-top:10px;padding-top:15px"><span><strong>Overall</strong></span><span><strong>${totalScore}/${totalQs} (${overallPct}%)</strong></span></div>`;document.getElementById('finalBreakdown').innerHTML=html;document.getElementById('finalOverallScore').textContent=totalScore+' / '+totalQs;let msg='';if(overallPct===100){msg='Perfect score across all parts! Absolutely amazing! &#127775;&#127941;';}else if(overallPct>=80){msg='Excellent work! You have mastered the material! &#128077;';}else if(overallPct>=60){msg='Good effort! Keep practicing and you will improve! &#128170;';}else if(overallPct>=40){msg='Not bad! Review the lectures and try again! &#128218;';}else{msg="Keep studying! Every attempt helps you learn! &#128293;";}document.getElementById('finalOverallMessage').innerHTML=msg;}
-function restartAll(){currentPart='';currentQuestion=0;score=0;answered=[];partScores={A:null,B:null,C:null,D:null,E:null,F:null};partAnswered={A:[],B:[],C:[],D:[],E:[],F:[]};document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('completed'));document.getElementById('finalResultsCard').classList.remove('show');showMenu();}
+function showMenu(){
+  document.getElementById("startCard").classList.add("hidden");
+  document.getElementById("quizArea").classList.add("hidden");
+  document.getElementById("partResults").classList.remove("show");
+  document.getElementById("finalResultsCard").classList.remove("show");
+  document.getElementById("partInfo").classList.add("hidden");
+  document.getElementById("menuCard").classList.remove("hidden");
+  document.getElementById("progressBar").style.display="none";
+  for(let p in partScores){let el=document.getElementById("menu-"+p.toLowerCase());if(el){el.classList.add("completed");el.querySelector(".badge").textContent="Completed: "+partScores[p]+"/"+questionsData[p].length;}}
+}
+
+function startPart(part){
+  currentPart=part;currentQuestion=0;score=0;partAnswers[currentPart]=[];
+  document.getElementById("menuCard").classList.add("hidden");
+  document.getElementById("startCard").classList.add("hidden");
+  document.getElementById("partResults").classList.remove("show");
+  document.getElementById("finalResultsCard").classList.remove("show");
+  document.getElementById("partInfo").classList.remove("hidden");
+  document.getElementById("partTitle").textContent="Part "+part;
+  document.getElementById("partDesc").textContent=partNames[part];
+  document.getElementById("quizArea").classList.remove("hidden");
+  document.getElementById("progressBar").style.display="block";
+  updateProgress();renderQuestion();
+}
+
+function updateProgress(){
+  let pct=((currentQuestion)/questionsData[currentPart].length)*100;
+  document.getElementById("progressFill").style.width=pct+"%";
+}
+
+function renderQuestion(){
+  let qData=questionsData[currentPart][currentQuestion];
+  let container=document.getElementById("questionsContainer");
+  let letters=["A","B","C","D"];
+  let html=`<div class="question-card active">
+    <div class="question-text">${qData.q}</div>
+    <div class="options">`;
+  qData.opts.forEach((opt,i)=>{
+    html+=`<div class="option" onclick="selectOption(${i})" id="opt-${i}">
+      <span class="option-letter">${letters[i]}</span>
+      <span>${opt}</span>
+    </div>`;
+  });
+  html+=`</div>
+    <div class="feedback" id="feedback"></div>
+    <div style="text-align:right"><button class="btn-next" id="nextBtn" onclick="nextQuestion()">Next Question &#8594;</button></div>
+  </div>`;
+  container.innerHTML=html;
+  document.getElementById("questionCounter").textContent=`Question ${currentQuestion+1} of ${questionsData[currentPart].length}`;
+}
+
+function selectOption(selected){
+  let qData=questionsData[currentPart][currentQuestion];
+  let opts=document.querySelectorAll(".option");
+  opts.forEach(o=>o.classList.add("disabled"));
+  let correct=qData.ans;
+  let fb=document.getElementById("feedback");
+  if(selected===correct){
+    document.getElementById("opt-"+selected).classList.add("selected-correct");
+    fb.textContent="Correct! Well done.";
+    fb.className="feedback correct show";
+    score++;
+  } else {
+    document.getElementById("opt-"+selected).classList.add("selected-wrong");
+    document.getElementById("opt-"+correct).classList.add("reveal-correct");
+    fb.textContent="Incorrect. The correct answer was: "+qData.opts[correct];
+    fb.className="feedback wrong show";
+  }
+  partAnswers[currentPart].push({q:qData.q,selected:qData.opts[selected],correct:qData.opts[correct],isCorrect:selected===correct});
+  document.getElementById("nextBtn").classList.add("show");
+}
+
+function nextQuestion(){
+  currentQuestion++;
+  updateProgress();
+  if(currentQuestion<questionsData[currentPart].length){
+    renderQuestion();
+  } else {
+    showPartResults();
+  }
+}
+
+function showPartResults(){
+  document.getElementById("quizArea").classList.add("hidden");
+  document.getElementById("partInfo").classList.add("hidden");
+  document.getElementById("partResults").classList.add("show");
+  document.getElementById("progressFill").style.width="100%";
+  let total=questionsData[currentPart].length;
+  let pct=Math.round((score/total)*100);
+  let msg,icon;
+  if(pct>=80){msg="Excellent! Outstanding performance!";icon="&#127775;";}
+  else if(pct>=60){msg="Good job! You are doing well!";icon="&#128077;";}
+  else if(pct>=40){msg="Not bad! Keep practicing!";icon="&#128170;";}
+  else {msg="Keep studying! You will do better next time!";icon="&#128293;";}
+  document.getElementById("partResultsIcon").innerHTML=icon;
+  document.getElementById("partResultsScore").textContent=score+"/"+total;
+  document.getElementById("partResultsMessage").textContent=msg+" ("+pct+"%)";
+  let breakdown="";
+  for(let i=0;i<partAnswers[currentPart].length;i++){
+    let a=partAnswers[currentPart][i];
+    let cls=a.isCorrect?"correct-ans":"wrong-ans";
+    let txt=a.isCorrect?"Correct":"Wrong";
+    let qtext=a.q.replace(/<pre>.*?<\/pre>/gs,"[code]").replace(/<code>(.*?)<\/code>/g,"$1");
+    if(qtext.length>100) qtext=qtext.substring(0,100)+"...";
+    breakdown+=`<div class="score-item"><span>Q${i+1}: ${qtext}</span><span class="${cls}">${txt}</span></div>`;
+  }
+  document.getElementById("partScoreBreakdown").innerHTML=breakdown;
+  partScores[currentPart]=score;
+  let nextBtn=document.getElementById("nextPartBtn");
+  let parts=Object.keys(questionsData);
+  let idx=parts.indexOf(currentPart);
+  if(idx<parts.length-1){
+    nextBtn.textContent="Next Part: "+partNames[parts[idx+1]]+" &#8594;";
+    nextBtn.onclick=()=>startPart(parts[idx+1]);
+    nextBtn.style.display="inline-block";
+  } else {
+    nextBtn.textContent="See Final Results &#127942;";
+    nextBtn.onclick=showFinalResults;
+    nextBtn.style.display="inline-block";
+  }
+}
+
+function nextPart(){
+  let parts=Object.keys(questionsData);
+  let idx=parts.indexOf(currentPart);
+  if(idx>=0&&idx<parts.length-1){
+    startPart(parts[idx+1]);
+  } else {
+    showFinalResults();
+  }
+}
+
+function showFinalResults(){
+  document.getElementById("menuCard").classList.add("hidden");
+  document.getElementById("startCard").classList.add("hidden");
+  document.getElementById("quizArea").classList.add("hidden");
+  document.getElementById("partResults").classList.remove("show");
+  document.getElementById("partInfo").classList.add("hidden");
+  document.getElementById("finalResultsCard").classList.add("show");
+  document.getElementById("progressBar").style.display="none";
+  let totalScore=0,totalQuestions=0;
+  let html="<h3>Score Breakdown by Part</h3>";
+  for(let p in questionsData){
+    let s=partScores[p]||0;let t=questionsData[p].length;
+    totalScore+=s;totalQuestions+=t;
+    let pct=Math.round((s/t)*100);
+    html+=`<div class="part-score-row"><span>Part ${p}: ${partNames[p]}</span><span><strong>${s}/${t}</strong> (${pct}%)</span></div>`;
+  }
+  let overallPct=Math.round((totalScore/totalQuestions)*100);
+  html+=`<div class="part-score-row" style="border-top:2px solid #3498db;margin-top:10px;padding-top:10px;font-size:18px"><span>Overall Score</span><span><strong>${totalScore}/${totalQuestions}</strong> (${overallPct}%)</span></div>`;
+  document.getElementById("finalBreakdown").innerHTML=html;
+  document.getElementById("finalOverallScore").textContent=overallPct+"%";
+  let msg2;
+  if(overallPct>=80) msg2="Excellent work! You have mastered the material!";
+  else if(overallPct>=60) msg2="Good job! You have a solid understanding!";
+  else if(overallPct>=40) msg2="Keep practicing! You are making progress!";
+  else msg2="Keep studying! You will improve with practice!";
+  document.getElementById("finalOverallMessage").textContent=msg2;
+}
+
+function restartAll(){
+  currentPart="";currentQuestion=0;score=0;
+  partScores={};partAnswers={};
+  for(let p in questionsData){let el=document.getElementById("menu-"+p.toLowerCase());if(el){el.classList.remove("completed");el.querySelector(".badge").textContent=questionsData[p].length+" Questions";}}
+  showMenu();
+}
 </script>
 </body>
 </html>
