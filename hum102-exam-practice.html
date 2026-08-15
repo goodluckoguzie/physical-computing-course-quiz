@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUM102 Critical Thinking - Exam Practice Pack</title>
+<style>
+  :root{
+    --bg:#F7F4EF; --card:#FFFFFF; --ink:#2B2A28; --muted:#6E675E;
+    --accent:#A8572A; --accent-dark:#7C3F1D; --accent-soft:#F3E7DE;
+    --line:#E5DFD5; --ok:#4A7A52; --ok-soft:#EAF2EB; --bad:#B34A3C; --bad-soft:#F7E9E6;
+    --gold:#8C6D1F; --gold-soft:#F6EFDD;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.25}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+  header.hero{background:#2E2A25;color:#F5F1EA;padding:48px 0 36px}
+  header.hero h1{margin:0 0 8px;font-size:32px;color:#F5F1EA}
+  header.hero p{margin:6px 0;color:#CFC7BB;max-width:760px}
+  .badge{display:inline-block;background:var(--accent);color:#fff;border-radius:20px;padding:3px 14px;font-size:13px;letter-spacing:.5px;margin-bottom:14px}
+  nav.bar{position:sticky;top:0;z-index:50;background:#2E2A25;border-top:1px solid #45403A;padding:10px 0}
+  nav.bar .wrap{padding-bottom:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  nav.bar a{color:#D8D0C4;text-decoration:none;font-size:14px;padding:6px 12px;border-radius:6px}
+  nav.bar a:hover{background:#45403A;color:#fff}
+  #timer{margin-left:auto;color:#F5F1EA;font-size:14px;display:flex;gap:8px;align-items:center}
+  #timer b{font-variant-numeric:tabular-nums;font-size:16px}
+  #timer button{background:var(--accent);border:none;color:#fff;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:13px}
+  #timer button.ghost{background:transparent;border:1px solid #6B6459}
+  section{margin-top:44px}
+  .sec-head{border-left:5px solid var(--accent);padding-left:16px;margin-bottom:6px}
+  .sec-head h2{margin:0;font-size:26px}
+  .sec-head p{color:var(--muted);margin:4px 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:18px;box-shadow:0 1px 3px rgba(60,50,40,.05)}
+  .qtag{display:inline-block;background:var(--accent-soft);color:var(--accent-dark);font-weight:600;font-size:13px;border-radius:6px;padding:2px 10px;margin-bottom:10px}
+  .marks{float:right;color:var(--muted);font-size:14px;font-weight:600}
+  .question{font-size:18px;font-weight:600;margin:4px 0 14px;font-family:Georgia,serif}
+  textarea{width:100%;min-height:170px;border:1px solid var(--line);border-radius:8px;padding:14px;font-size:15px;font-family:inherit;line-height:1.6;background:#FDFCFA;resize:vertical}
+  textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .wcount{font-size:13px;color:var(--muted);text-align:right;margin-top:4px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:14px;cursor:pointer;margin-top:12px;margin-right:8px}
+  .btn:hover{background:var(--accent-dark)}
+  .btn.ghost{background:transparent;color:var(--accent-dark);border:1px solid var(--accent)}
+  .btn.ghost:hover{background:var(--accent-soft)}
+  .answer{display:none;margin-top:16px;border:1px solid #D8E4DA;border-left:5px solid var(--ok);background:var(--ok-soft);border-radius:10px;padding:18px 20px}
+  .answer h4{margin:0 0 8px;color:var(--ok);font-size:15px;text-transform:uppercase;letter-spacing:.6px}
+  .answer p{margin:8px 0}
+  .answer ul{margin:8px 0;padding-left:22px}
+  .tips{display:none;margin-top:16px;border:1px solid #E8DCC2;border-left:5px solid var(--gold);background:var(--gold-soft);border-radius:10px;padding:16px 20px}
+  .tips h4{margin:0 0 8px;color:var(--gold);font-size:15px;text-transform:uppercase;letter-spacing:.6px}
+  .tips ul{margin:6px 0;padding-left:22px}
+  .article-box{background:#F4F1EC;border:1px dashed #C9C0B4;border-radius:10px;padding:16px 20px;margin:14px 0;font-size:15px}
+  .article-box h4{margin:0 0 8px;font-family:Georgia,serif}
+  .rubric{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .rubric div{flex:1;min-width:150px;border-radius:10px;padding:12px 14px;font-size:13.5px;border:1px solid var(--line);background:#fff}
+  .rubric b{display:block;margin-bottom:4px;font-size:14px}
+  /* quiz */
+  .quiz-q{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}
+  .quiz-q:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .quiz-q p{font-weight:600;margin:0 0 10px}
+  .opt{display:block;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0;cursor:pointer;font-size:15px;background:#FDFCFA}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt.right{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+  .expl{display:none;font-size:14px;color:var(--muted);background:#F4F1EC;border-radius:8px;padding:10px 14px;margin-top:6px}
+  #score{display:none;margin-top:18px;padding:16px 20px;border-radius:10px;background:var(--gold-soft);border:1px solid #E8DCC2;font-size:16px}
+  footer{margin-top:60px;color:var(--muted);font-size:13.5px;text-align:center;border-top:1px solid var(--line);padding-top:24px}
+  .mini{font-size:13.5px;color:var(--muted)}
+  @media(max-width:640px){header.hero h1{font-size:25px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">HUM102 · CRITICAL THINKING · MOCK EXAM PRACTICE</span>
+    <h1>Exam Practice Pack</h1>
+    <p>All 6 questions from your mock exam, with writing space, model answers in simple English, an auto-marked objective quiz, and extra practice questions from Weeks 7-10.</p>
+    <p><b>Exam structure:</b> Section 1 = four questions × 10 marks (your opinion, short paragraph) · Section 2 = one 20-mark analysis of the BBC Trump article · Section 3 = one 40-mark essay comparing two articles. Total = 100 marks.</p>
+  </div>
+</header>
+
+<nav class="bar">
+  <div class="wrap">
+    <a href="#quiz">Objective Quiz</a>
+    <a href="#articles">📖 Articles</a>
+    <a href="#s1">Section 1 (Q1-Q4)</a>
+    <a href="#s2">Section 2 (Q5)</a>
+    <a href="#s3">Section 3 (Q6)</a>
+    <a href="#extra">Extra Practice</a>
+    <span id="timer">⏱ <b id="clock">100:00</b>
+      <button onclick="startTimer()">Start</button>
+      <button class="ghost" onclick="resetTimer()">Reset</button>
+    </span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ MARKING GUIDE ============ -->
+<section id="guide">
+  <div class="sec-head"><h2>How you are marked</h2><p>Keep these bands in mind every time you write.</p></div>
+  <div class="rubric">
+    <div><b>🏆 Distinction (70%+)</b>Clear independent argument, strong specific examples, real critical analysis, good structure.</div>
+    <div><b>✅ Merit (60-69%)</b>Good understanding, relevant examples, mostly well-structured, solid analysis.</div>
+    <div><b>📝 Pass (50-59%)</b>Basic understanding, some structure, but mostly describing instead of analysing.</div>
+    <div><b>❌ Fail (&lt;50%)</b>Little evidence of learning, poor structure, no independent thought.</div>
+  </div>
+  <div class="card">
+    <b>The golden rules from your lessons:</b>
+    <ul>
+      <li>Answer the <b>actual question</b> - underline the command word (describe / explain / analyse / evaluate).</li>
+      <li>Use <b>PEE</b> for short answers: <b>P</b>oint → <b>E</b>xplain → <b>E</b>xample.</li>
+      <li>Use <b>PEEL</b> for essays: <b>P</b>oint → <b>E</b>vidence → <b>E</b>xplain → <b>L</b>ink back to the question. For "evaluate" questions add a <b>counterargument</b> and a <b>final judgement</b>.</li>
+      <li>Always use <b>named, specific examples</b> (e.g. "TikTok's algorithm", "the 2020 US election") - never vague ones ("social media is bad").</li>
+      <li>Timing: about <b>2 minutes per mark</b>. Attempt every question - partial marks still count.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ OBJECTIVE QUIZ ============ -->
+<section id="quiz">
+  <div class="sec-head"><h2>Part A - Objective Quiz (auto-marked)</h2><p>18 quick questions on the key concepts and the two exam articles. Click an answer, then press "Mark my answers".</p></div>
+  <div class="card" id="quizBox"></div>
+  <button class="btn" onclick="markQuiz()">Mark my answers</button>
+  <button class="btn ghost" onclick="resetQuiz()">Try again</button>
+  <div id="score"></div>
+</section>
+
+<!-- ============ SECTION 1 ============ -->
+<section id="s1">
+  <div class="sec-head"><h2>Section 1 - Short Answers (4 × 10 marks)</h2><p>Your opinion is allowed here - first person is fine. Target: about 150-250 words each, about 20 minutes per question.</p></div>
+
+  <div class="card">
+    <span class="marks">10 marks</span>
+    <span class="qtag">QUESTION 1 · MOCK EXAM</span>
+    <div class="question">What are the key aspects of critical thinking?</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>Start with a clear definition of critical thinking.</li>
+        <li>Name at least 4-5 aspects and explain each one briefly - don't just list them.</li>
+        <li>Give a small example for at least one aspect.</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p>Critical thinking means not accepting information at face value. It is the skill of analysing, questioning and evaluating information before we decide what to believe or do.</p>
+      <p>The key aspects are:</p>
+      <ul>
+        <li><b>Questioning information</b> - asking "who said this, and why?" instead of just believing it.</li>
+        <li><b>Identifying assumptions</b> - noticing ideas that are accepted without proof, for example "she failed because she is lazy".</li>
+        <li><b>Recognising bias</b> - understanding that writers, media and we ourselves often favour one side (for example confirmation bias, where we only read things we already agree with).</li>
+        <li><b>Evaluating evidence</b> - checking if a source is credible, using tools like the CRAAP test (Currency, Relevance, Authority, Accuracy, Purpose).</li>
+        <li><b>Logical reasoning</b> - checking that a conclusion really follows from the reasons given, and spotting fallacies like ad hominem or straw man.</li>
+        <li><b>Considering other viewpoints</b> - looking at both sides before judging.</li>
+        <li><b>Reaching a justified conclusion</b> - deciding based on evidence, not feelings, and being willing to change our mind.</li>
+      </ul>
+      <p>For example, when I see a shocking headline on social media, I now check the source and look for evidence before believing or sharing it. In short, critical thinking is a process: gather information, analyse it, evaluate it, and then decide.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="marks">10 marks</span>
+    <span class="qtag">QUESTION 2 · MOCK EXAM</span>
+    <div class="question">How do people attempt to use bias to influence opinion?</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>Name at least 3-4 techniques and explain how each one works.</li>
+        <li>Use named examples (adverts, social media algorithms, news framing).</li>
+        <li>Link each technique back to "influencing opinion".</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p>People and organisations use our natural biases to push us towards an opinion without us noticing. Here are the main ways:</p>
+      <ul>
+        <li><b>Confirmation bias</b> - social media algorithms (for example TikTok and X) show us content similar to what we already liked. This creates an "echo chamber" where we only see one side, so our existing opinion feels stronger and more "obviously right".</li>
+        <li><b>Framing bias</b> - the same fact is presented in a way that changes how we feel. "90% effective" sounds good; "10% ineffective" sounds bad - but they are the same information. Newspapers do this with headlines: "Government creates opportunities" vs "Government wastes millions".</li>
+        <li><b>Anchoring bias</b> - shops show a high "original price" first, so the sale price looks cheap. Our judgement is anchored to the first number we saw.</li>
+        <li><b>Selection bias</b> - companies only show positive reviews and success stories, and hide the negative ones, so the product looks better than it is.</li>
+        <li><b>Persuasion techniques</b> - advertisers use <b>fear appeals</b> ("don't risk your family's future"), <b>bandwagon</b> ("millions of satisfied customers"), <b>testimonials</b> (celebrities and influencers) and <b>glittering generalities</b> (vague positive words like "freedom" and "natural goodness").</li>
+      </ul>
+      <p>All of these work because they target our emotions and mental shortcuts instead of our reasoning. A critical thinker notices the technique, asks what information is missing, and looks for the other side before forming an opinion.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="marks">10 marks</span>
+    <span class="qtag">QUESTION 3 · MOCK EXAM</span>
+    <div class="question">How will you use critical thinking in your degree?</div>
+    <textarea placeholder="Write your answer here... (write about YOUR degree pathway)" oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>This question is personal - write in the first person about <b>your</b> degree (Law, Nursing, Business or Media).</li>
+        <li>Give 2-3 specific situations in your field where critical thinking helps.</li>
+        <li>The model below uses all four pathways - pick yours and write in that style.</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English) - choose your pathway</h4>
+      <p><b>General opening (everyone):</b> In my degree, critical thinking will help me to evaluate information instead of just accepting it, to build strong arguments in assignments, and to make better decisions in my future profession.</p>
+      <p><b>⚖️ Law:</b> In Law, I will use critical thinking to evaluate the credibility of evidence and witness statements - for example, noticing when a witness may be biased or mistaken. I will analyse opposing lawyers' arguments to find logical fallacies, such as ad hominem attacks, and I will check that legal arguments really follow from the evidence before accepting them.</p>
+      <p><b>🏥 Nursing:</b> In Nursing, I will use evidence-based practice: questioning a diagnosis when the patient's symptoms do not match it, checking research before using a treatment, and not relying on assumptions about patients. For example, online health information can be wrong, so I will evaluate sources carefully before advising patients.</p>
+      <p><b>📊 Business:</b> In Business, I will analyse market research critically - asking whether the data might have sampling bias, whether a survey was leading, and whether a source has a commercial interest. This stops a company from making expensive decisions based on weak data.</p>
+      <p><b>📰 Media:</b> In Media, I will deconstruct how stories are framed, check sources before publishing, and recognise editorial bias. For example, I will ask who created the content, what evidence is given, and what the purpose of the message is (to inform, persuade, or sell).</p>
+      <p><b>Conclusion (everyone):</b> In all cases, critical thinking means I will question claims, check evidence, recognise my own biases, and justify my conclusions - skills my lecturers and future employers both value.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="marks">10 marks</span>
+    <span class="qtag">QUESTION 4 · MOCK EXAM</span>
+    <div class="question">What are the impediments to critical thinking?</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>"Impediments" = barriers / obstacles. Name at least 4 and explain how each one blocks critical thinking.</li>
+        <li>Give an example for at least two of them.</li>
+        <li>Finish with a short line about how to overcome them.</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p>Impediments to critical thinking are the barriers that stop us from thinking clearly and fairly. The main ones are:</p>
+      <ul>
+        <li><b>Confirmation bias</b> - we look for information that agrees with what we already believe and ignore the rest. For example, a person who distrusts vaccines may only read anti-vaccine websites.</li>
+        <li><b>Emotional reasoning</b> - strong feelings like fear or anger make us accept claims without checking them. Misinformation spreads fast because it uses emotional language.</li>
+        <li><b>Groupthink</b> - in a group, people agree with the majority to avoid conflict, so bad ideas are not challenged.</li>
+        <li><b>Cognitive dissonance</b> - when new evidence contradicts our beliefs, we feel uncomfortable, so we reject the evidence instead of changing our mind.</li>
+        <li><b>Information overload</b> - there is so much content online that we skim headlines instead of checking sources deeply.</li>
+        <li><b>Assumptions and stereotypes</b> - accepting things without proof, for example judging a person by their age or background.</li>
+        <li><b>Ego and closed-mindedness</b> - not wanting to admit we are wrong.</li>
+      </ul>
+      <p>To overcome these barriers, we should slow down, check sources (lateral reading), deliberately look for opposing views, and be honest about our own biases. In this way the barriers can be managed, even if they can never be removed completely.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXAM ARTICLES ============ -->
+<section id="articles">
+  <div class="sec-head"><h2>📖 The Exam Articles - read them here</h2><p>Reading copies condensed from your uploaded PDFs. For the exact wording, always check your original PDF files.</p></div>
+
+  <div class="card">
+    <span class="qtag">ARTICLE FOR QUESTION 5</span>
+    <div class="question" style="font-size:17px">BBC News - "What tariffs has Trump introduced and why?"</div>
+    <button class="btn" onclick="toggleA(this)">Read the article</button>
+    <div class="answer" style="border-left-color:var(--accent);background:#FBF8F4;border-color:var(--line)">
+      <h4 style="color:var(--accent-dark)">BBC News explainer (reading copy)</h4>
+      <p>Trump argues that his import taxes have boosted US manufacturing and created jobs. But critics say they have put up prices for American consumers and have disrupted and damaged the global economy. The new 10% duty is thought to replace the individual rates negotiated between the US and dozens of trading partners - including the UK, India and the EU.</p>
+      <p><b>What are tariffs and how do they work?</b> Tariffs are taxes on imported goods, typically a percentage of a good's value. For example, a 10% tariff on a $10 product means a $1 tax on top - taking the total cost to $11 (£8.17). The tax is paid to the government by companies bringing in the foreign products. These firms may pass some or all of the extra cost on to their customers - American consumers and other US businesses. Companies may also decide to import fewer goods.</p>
+      <p><b>Why is Trump using tariffs?</b> Trump says "tariff" is his favourite word, and has for decades hailed tariffs as a way to boost the US economy. He argues they increase the amount of tax raised by the government. He has also used tariffs for his wider political agenda: when he threatened duties against China, Mexico and Canada, he said those countries had to do more to stop migrants and the drug fentanyl reaching the US. In January 2026 he said the US would apply a 25% tariff to Iran's trading partners after Tehran cracked down on protests, and he threatened tariffs on eight European countries which opposed his plans over Greenland, before backing down.</p>
+      <p><b>What did the Supreme Court say?</b> On 20 February, the US Supreme Court said Trump had exceeded his authority when he used emergency powers to introduce tariffs on specific countries without approval from Congress. That ruling affected all tariffs brought in under the International Emergency Economic Powers Act (IEEPA) - including the early 2025 tariffs on Mexico, Canada and China, and the "Liberation Day" April 2025 tariffs of up to 50% on dozens of countries.</p>
+      <p><b>How will Trump's 10% tariff work?</b> In response, Trump used different legislation - Section 122 of the 1974 Trade Act - to impose a temporary 10% tariff on all global imports. He had threatened 15%, but the lower rate took effect on 24 February and remains for 150 days, after which he is expected to consult Congress. Various goods are exempted, such as critical minerals, metals, pharmaceuticals and some foodstuffs including beef and oranges. The exemption for Canada and Mexico under the USMCA free trade deal continues. Countries which had negotiated individual tariffs now face the global 10% rate instead.</p>
+      <p><b>Reaction and refunds.</b> China said it was "conducting a comprehensive assessment" of the ruling. The Supreme Court did not specify whether the government must refund the money collected under the IEEPA tariffs - estimated at around $130bn (£96bn). Trump previously said refunds would be a "complete mess" and "almost impossible for our Country to pay". Trump and Treasury Secretary Scott Bessent both said the courts must decide, a process which could take years. Days after the ruling, FedEx said it was suing the US government for a "full refund".</p>
+      <p><b>What do tariffs mean for the UK?</b> The UK had already negotiated 10% tariffs with the US on most goods in June 2025. In 2024, the UK exported about £58bn of goods to the US - mainly cars, machinery and pharmaceuticals. Under the deal, the 10% rate applies to the first 100,000 UK vehicles exported per year; additional cars face the standard 25% tariff. UK steel exports to the US face a 25% duty, versus 50% for steel and aluminium from the rest of the world. The UK Prime Minister's official spokesman said the "majority" of the deal was not expected to change after the ruling, but called the situation "evolving".</p>
+      <p><b>Other tariffs listed:</b> 50% on copper imports; 50% on kitchen and bathroom cabinets and some furniture; 25% on most foreign-made cars, engines and car parts; 25% on all heavy-duty trucks. Trump also ended the duty-free exemption for imports valued at $800 (£592) or less (the "de minimis" rule) - affecting millions of packages sent every day, including from online retailers Shein and Temu.</p>
+      <p><b>How have tariffs affected US prices?</b> Many firms - including Target, Walmart and Adidas - said they would pass the cost of tariffs on to US customers. Products that have become more expensive include toys, appliances, furniture and certain foodstuffs, as well as goods made in the US using imported components. However, on the whole, prices have not risen by as much as some analysts had predicted. US inflation was 2.4% in the 12 months to January 2026 - down from 2.7% the previous month, but the same as April 2025, before most tariffs took effect.</p>
+      <p><b>How have tariffs affected the global economy?</b> The economic watchdog (the IMF) expects global growth of 3.3% in 2026 (revised up from 3.1%), slowing slightly to 3.2% in 2027. It expects global headline inflation to fall to 3.8% in 2026 and 3.4% in 2027, but predicts US inflation will fall more slowly than in other large economies.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">ARTICLE ONE - FOR QUESTION 6 ("Trans good" file)</span>
+    <div class="question" style="font-size:17px">The Independent - "Are there any transgender athletes competing at the 2024 Olympics?"</div>
+    <p class="mini">By Sonia Twigg · The Independent · Friday 2 August 2024 · Sport &gt; Olympics section</p>
+    <button class="btn" onclick="toggleA(this)">Read the article</button>
+    <div class="answer" style="border-left-color:var(--accent);background:#FBF8F4;border-color:var(--line)">
+      <h4 style="color:var(--accent-dark)">The Independent explainer (reading copy)</h4>
+      <p>The Paris 2024 Olympics has stricter rules and regulations regarding transgender athletes than previous Games. Paris 2024 is the first "gender-equal" Games, with 50 per cent of medals going to women - a first in the event's history. There has been rising interest in transgender athletes, with concerns that transgender women have an unfair advantage over fellow competitors, and a number of federations have strict guidelines.</p>
+      <p><b>What are the rules?</b> The IOC has no specific rules; it issues 10 guiding principles and states that "each international federation is responsible for setting eligibility rules for its sport, including the eligibility criteria that determine qualification for the Olympic Games." The guidelines require transgender women to have transitioned before the age of 12 to be eligible for the women's category, to prevent potential biological advantage from male puberty.</p>
+      <p><b>Which sports have these rules?</b> World Athletics and Fina (swimming's governing body) adopted the IOC guidelines. Cycling follows the guidelines for women's categories but created an "open" category replacing the men's category. World Rowing allows those who transitioned before puberty, with a testosterone criterion of less than 2.5 nmol/L for at least 24 months; rugby follows the IOC guidelines. Triathlon, tennis and archery require testosterone below a set limit. Other sports decide case by case.</p>
+      <p><b>Will there be any transgender or non-binary athletes at the Paris Olympics?</b> Laurel Hubbard (New Zealand weightlifter) was the first openly transgender Olympian at Tokyo 2020; she finished last in her group and is not competing in Paris. Nikki Hiltz, who is transgender and non-binary and uses they/them pronouns, has always competed in the female category and represented the USA, setting a US trials record in the 1500m. Quinn, a Canadian non-binary footballer, has always played in female categories and was selected for the Games. Hergie Bacyadan, a Filipino boxer, competed in the women's 75kg while identifying as a trans man; born female, he was permitted because he had not undergone hormone replacement treatment.</p>
+      <p><b>Which transgender athletes are not allowed to compete in Paris?</b> Chelsea Wolfe (US BMX rider) was ruled out after the UCI changed its regulations. Halba Diouf (Senegalese-born French sprinter) was barred by World Athletics' new regulations. Lia Thomas (US swimmer), the first transgender athlete to win a US college title in 2022, lost a legal case against World Aquatics and remains barred from the female category.</p>
+      <p><b>What was the boxing controversy?</b> On 1 August, Angela Carini withdrew mid-fight against Imane Khelif after the latter landed one significant punch. At the 2023 World Championships, Khelif was disqualified by the International Boxing Association (IBA) for failing a gender eligibility test; Taiwan's double world champion Lin Yu-ting lost her bronze at the same competition for the same reason. The IBA did not specify why the boxers failed and clarified that neither underwent testosterone examinations. Neither Khelif nor two-time world champion Lin identifies as transgender or intersex. The IBA is no longer recognised by the IOC; Paris boxing is run by the Paris Boxing Unit (PBU). The IOC stated: "All athletes participating in the boxing tournament of the Olympic Games Paris 2024 comply with the competition's eligibility and entry regulations, as well as all applicable medical regulations."</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">ARTICLE TWO - FOR QUESTION 6 ("Trans bad" file)</span>
+    <div class="question" style="font-size:17px">The Conversation - "Why the World Rugby guidelines banning trans athletes from the women's game are reasonable"</div>
+    <p class="mini">By Jon Pike, Senior Lecturer in Philosophy, The Open University · Published 23 February 2021, updated 1 March 2021</p>
+    <button class="btn" onclick="toggleA(this)">Read the article</button>
+    <div class="answer" style="border-left-color:var(--accent);background:#FBF8F4;border-color:var(--line)">
+      <h4 style="color:var(--accent-dark)">The Conversation opinion piece (reading copy)</h4>
+      <p>The author argues that World Rugby's 2020 guidelines excluding transwomen from women's rugby at World Cup level are "fair, reasonable and supported by evidence. They offer the best way forward, not just for rugby, but for other sports." Rugby was the first international sports federation to adopt such an exclusion.</p>
+      <p><b>A sports ethics viewpoint.</b> Pike discloses that he participated in the London global symposium where the guidelines were debated, as a sports-ethics expert, and has done work for WADA and the IOC. He rejects the "balancing" approach (balancing fairness against safety, favoured by trans-inclusion advocates) and instead argues for a "lexical priority" approach, drawn from his own recently published paper: first select rules that are safe, then among safe rules those that are fair, then among those the maximally inclusive - "first, do A, then B, then C."</p>
+      <p><b>What about the science?</b> He cites three bodies of evidence. First, a review paper by Emma Hilton (developmental biologist) and Tommy Lundberg (sports scientist) concluding that hormone replacement therapy reduces male advantage "much less than would be needed to ensure a level playing field" - transwomen retain advantages in muscle mass, strength and VO2 max. Second, a study by Timothy Roberts and colleagues of US military personnel reaching similar conclusions. Third, World Rugby's own biomechanical modelling: transgender players in the women's game allegedly create head and neck forces 20-30% greater than elite women's rugby players as a result of mass differences alone, suggesting injury risk.</p>
+      <p><b>How does fairness fit in?</b> Pike argues that safety concerns alone justify the guidelines for a collision sport. He then presents the "advantage argument": women's sport exists because of male physiological advantage, and the category necessarily excludes those with male advantage - "That's the point of the category." He considers the opposing "range argument" - that many male-born people, including transwomen, fall within the female performance range, so inclusion could be fair - and rejects it ("Wrong. The range argument rests on a misunderstanding of women's sport"). He argues the category is justified not by performance metrics but "by the absence of a particular sort of advantage", and claims that those who deny residual male advantage matters "are actually arguing for unisex sport". He concludes the cited studies show "conclusively" that male advantage is retained after transition.</p>
+      <p><b>Where to from here for other sports.</b> He notes the World Rugby evidence is public and the IOC is consulting federations ahead of the Tokyo Olympics, and ends by challenging the IOC: will it "respond to the latest research, or continue to keep their heads in the sand?"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section id="s2">
+  <div class="sec-head"><h2>Section 2 - Article Analysis (20 marks)</h2><p>Written in academic style. Target: about 400-500 words, about 40 minutes. Analyse HOW the author influences you - not just what the article says.</p></div>
+
+  <div class="card">
+    <span class="marks">20 marks</span>
+    <span class="qtag">QUESTION 5 · MOCK EXAM</span>
+    <div class="question">Critically analyse the "BBC Trump" article. What is the author's perspective and how are they attempting to influence you?</div>
+    <div class="article-box">
+      <h4>📄 Quick reminder - the article</h4>
+      <p class="mini">BBC News explainer: <b>"What tariffs has Trump introduced and why?"</b> It explains what tariffs are (a tax on imports), why Trump uses them (raise tax income, boost US manufacturing, push political goals like migration and fentanyl), the Supreme Court ruling that many tariffs were illegal, the new 10% global tariff, effects on the UK (£58bn exports, car and steel deals), effects on US prices (Target, Walmart, Adidas passing costs to customers; inflation 2.4%), and the global economy (IMF growth forecast 3.3% for 2026). It quotes Trump, the Treasury Secretary, the UK PM's spokesman, China, and FedEx.</p>
+    </div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>Say clearly what the author's perspective is (neutral explainer, but with a mild critical tilt).</li>
+        <li>Analyse at least 4-5 influence techniques: balance techniques AND framing choices.</li>
+        <li>Mention provenance: BBC = public broadcaster with editorial standards.</li>
+        <li>Say what is missing (no pro-tariff voice, anonymous "some analysts").</li>
+        <li>End with a judgement: how successful was the influence on you, and did it exploit any of your biases?</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>The author's perspective:</b> The article is a BBC News "explainer", so its main perspective is neutral and informative. The author does not give their own opinion directly. However, the article is not completely neutral - it has a mild critical tilt against the tariffs. For example, one heading calls them "illegal tariffs" (true after the Supreme Court ruling, but a strong word), and the "related articles" all focus on harm, such as "Poorer Americans hit hardest" and "major blow to Trump's agenda".</p>
+      <p><b>How the author influences the reader:</b></p>
+      <ul>
+        <li><b>Balance and attribution:</b> Almost every claim is attached to a named source - Trump, the Treasury Secretary, the UK Prime Minister's spokesman, China, FedEx. This builds trust (ethos) because we can check who said what.</li>
+        <li><b>Two-sided evidence:</b> The article says prices rose for toys and furniture, but also admits that "prices have not risen by as much as some analysts had predicted" and that inflation (2.4%) was the same as before most tariffs. Giving both sides makes the article feel fair - which makes us trust its overall message more.</li>
+        <li><b>Framing and selection:</b> The author chose to give more space to the harms of tariffs than to their possible benefits. No pro-tariff voice (for example a US factory owner who benefits) is quoted. This selection quietly pushes the reader towards a negative view of the tariffs.</li>
+        <li><b>Emotional images:</b> The photos - Trump's red "Make America Great Again" hat, and a steelworker with sparks flying - create feelings about politics and industrial danger before we even read the text.</li>
+        <li><b>Vague sources:</b> Phrases like "some analysts" and "the economic watchdog" are anonymous. This is a weakness, because we cannot judge their credibility.</li>
+      </ul>
+      <p><b>My judgement:</b> Overall the article is credible - it uses the CRAAP test well (current, relevant, strong authority, accurate figures, clear purpose to inform). Its influence works mainly through framing and selection, not through open persuasion. It may exploit my confirmation bias: because I already suspected tariffs hurt consumers, I accepted the negative examples quickly. A fully critical reader should also check pro-tariff arguments before deciding.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section id="s3">
+  <div class="sec-head"><h2>Section 3 - Comparison Essay (40 marks)</h2><p>The big one. Academic style with a clear introduction, analysis and conclusion. Target: about 500-700 words, about 80 minutes (including planning).</p></div>
+
+  <div class="card">
+    <span class="marks">40 marks</span>
+    <span class="qtag">QUESTION 6 · MOCK EXAM</span>
+    <div class="question">Read Article One and Article Two. Which article is the more convincing? Review the provenance, the cited sources, and how this impacts the legitimacy of the argument.</div>
+    <div class="article-box">
+      <h4>📄 Quick reminder - the two articles</h4>
+      <p class="mini"><b>Article One - The Independent (your "Trans good" file):</b> "Are there any transgender athletes competing at the 2024 Olympics?" by Sonia Twigg (2 August 2024). A news explainer: it lists the rules of each sports federation, names athletes who can and cannot compete (Hubbard, Hiltz, Quinn, Bacyadan, Wolfe, Diouf, Thomas), quotes the IOC directly, and clarifies that the boxers Khelif and Lin do not identify as transgender - correcting misinformation. Balanced, factual, named author, checkable details.</p>
+      <p class="mini"><b>Article Two - The Conversation (your "Trans bad" file):</b> "Why the World Rugby guidelines banning trans athletes from the women's game are reasonable" by Jon Pike, philosophy lecturer (Feb 2021). An expert opinion piece arguing the ban is fair. He cites scientists (Hilton &amp; Lundberg, Roberts) and World Rugby's data (20-30% greater forces). But: he helped design the policy himself, cites his own paper, only uses studies that support his view, says the evidence is "conclusive", and ends by mocking the IOC ("heads in the sand"). <i>(Check which file is "One" and "Two" on your exam paper - match accordingly.)</i></p>
+    </div>
+    <textarea placeholder="Write your essay here..." oninput="wc(this)"></textarea>
+    <div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <button class="btn ghost" onclick="toggleT(this)">What the examiner wants</button>
+    <div class="tips">
+      <h4>Examiner tips</h4>
+      <ul>
+        <li>Structure: Introduction → 3-4 PEEL paragraphs → Conclusion with a clear verdict.</li>
+        <li>You MUST discuss: provenance (who wrote it, where, when), cited sources (quality + balance), and how these affect legitimacy.</li>
+        <li>Be fair: mention Article Two's strengths (academic author, named studies) before explaining its weaknesses.</li>
+        <li>Commit to a clear final judgement - don't sit on the fence.</li>
+      </ul>
+    </div>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>Introduction:</b> Both articles discuss transgender athletes in women's sport, but they are very different types of text. Article One (The Independent) is a news explainer by journalist Sonia Twigg. Article Two (The Conversation) is an opinion piece by philosopher Jon Pike defending World Rugby's ban. In my view, Article One is more convincing, because its provenance is more independent, its sources are more balanced, and it separates facts from opinion. However, Article Two looks academic on the surface, which makes its bias harder to spot.</p>
+      <p><b>Point 1 - Provenance.</b> Article One was published by The Independent, an established UK newspaper, with a named journalist and a clear date (2 August 2024). The author has no personal stake in the rules she describes. Article Two is written by a philosophy lecturer - but he openly says he took part in the meeting that designed the World Rugby guidelines, and he cites his own published paper. This is a conflict of interest: he is defending his own work. An independent journalist's account is therefore more trustworthy than an account by someone who benefits from the conclusion.</p>
+      <p><b>Point 2 - Use of sources.</b> Article One quotes primary sources directly, such as the IOC's official statements, and gives precise, checkable details (for example, the rule about transitioning before age 12, and rowing's testosterone limit of 2.5 nmol/L for 24 months). It also includes athletes on both sides - those included and those excluded. Article Two names real scientists, which looks strong, but every study it cites supports the ban. The key statistic - that trans players create "20-30% greater" forces - comes from World Rugby's own modelling, the same organisation whose policy the author defends, and it is a prediction, not real injury data. When an author only shows us one side of the evidence, this is cherry-picking, and it weakens the argument's legitimacy.</p>
+      <p><b>Point 3 - Balance and tone.</b> Article One avoids loaded language and even corrects misinformation, stating clearly that the boxers Khelif and Lin do not identify as transgender. Article Two overclaims: it says the science is "conclusive" when it was actually contested, dismisses the opposing "range argument" with the single word "Wrong.", and ends by accusing the IOC of keeping their "heads in the sand". These are signs of advocacy, not objective analysis. Article Two also gives no voice to trans athletes themselves.</p>
+      <p><b>Counterargument:</b> To be fair, Article Two does have strengths: a named expert, linked sources, a clear structure, and an honest disclosure of the author's role. If a reader wanted a reasoned case for the ban, it provides one. However, its framework ("lexical priority" - safety first, fairness second, inclusion last) is chosen in a way that guarantees the conclusion, which is a form of begging the question.</p>
+      <p><b>Conclusion:</b> Article One is the more convincing article. Its independent provenance, direct primary sources, balanced presentation and careful language make its information more legitimate. Article Two is well-written but partisan: its author, sources and framework all point in one direction. The comparison shows why critical thinkers must always ask: who wrote this, what evidence did they choose, and who benefits if I believe it?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXTRA PRACTICE ============ -->
+<section id="extra">
+  <div class="sec-head"><h2>Extra Practice - Questions I added for you</h2><p>These cover topics from Weeks 7-10 that the mock exam does not ask directly, but the real exam might.</p></div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 1 · SHORT ANSWER</span>
+    <div class="question">Explain what is meant by "misinformation" and describe two reasons why it is difficult to identify false information online. (5-10 marks)</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>Point:</b> Misinformation is false or inaccurate information that is spread <b>without</b> the intention to deceive - people share it because they genuinely believe it or did not check it. (Disinformation is different: that is false information spread <b>deliberately</b> to deceive.)</p>
+      <p><b>Reason 1 - algorithms:</b> Platforms like TikTok and X use engagement-based algorithms that push emotional and shocking content, because it gets clicks. False stories often spread faster than fact-checkers can respond. <b>Reason 2 - echo chambers:</b> we mostly see content similar to what we already believe, so false information is rarely challenged inside our feed.</p>
+      <p><b>Link:</b> This is why critical thinkers use lateral reading - opening new tabs to verify a source independently - and pause before sharing emotional content.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 2 · SHORT ANSWER</span>
+    <div class="question">Explain two barriers to effective critical thinking. (5-10 marks)</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>Barrier 1 - confirmation bias:</b> people actively seek information that supports their existing beliefs and ignore contradictory evidence. For example, a person who distrusts vaccines may only read anti-vaccine sources. This means contradictory evidence is dismissed, which seriously weakens the ability to evaluate information critically.</p>
+      <p><b>Barrier 2 - information overload:</b> the huge volume of daily content makes deep analysis impractical, so users skim headlines instead of checking sources. False stories can therefore be accepted and shared within seconds.</p>
+      <p><b>Link:</b> Both barriers show that critical thinking is not only about intelligence - it also requires time, effort and the habit of questioning. Individuals can resist them by pausing before sharing and deliberately seeking opposing perspectives.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 3 · COMMAND-WORD DRILL</span>
+    <div class="question">Same topic, four command words - how does your answer change? Practise all four: <i>"____ two barriers to critical thinking."</i> → Describe / Explain / Analyse / Evaluate</div>
+    <textarea placeholder="Plan all four versions here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <ul>
+        <li><b>Describe</b> = only say what they are: "Two barriers are confirmation bias and groupthink." (Just the main features - no reasons needed.)</li>
+        <li><b>Explain</b> = add <i>why/how</i> they matter: "Confirmation bias makes us ignore opposing evidence; groupthink makes us follow the majority to avoid conflict." (Mechanism + example.)</li>
+        <li><b>Analyse</b> = break down causes, relationships and consequences: how the barrier works, what it leads to, how the two barriers connect (e.g. groupthink strengthens confirmation bias inside echo chambers).</li>
+        <li><b>Evaluate</b> = weigh their importance, compare them, consider limitations, then give a justified judgement: "Confirmation bias is arguably the more significant barrier because… however, groupthink can be more dangerous in workplaces where… Overall…"</li>
+      </ul>
+      <p>Notice: a definition alone will <b>not</b> answer an "analyse" or "evaluate" question. The command word tells you the depth of thinking required.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 4 · ESSAY (20 marks style)</span>
+    <div class="question">"To what extent do you agree that individuals are responsible for critically evaluating the media they consume?" Discuss persuasion, bias and emotional appeals, using relevant examples.</div>
+    <textarea placeholder="Plan and write your essay here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model plan + key content</button>
+    <div class="answer">
+      <h4>Model plan + content (simple English)</h4>
+      <p><b>Introduction:</b> Define persuasion, bias and emotional appeals. State your position (e.g. "individuals share responsibility, but platforms and media companies share it too").</p>
+      <p><b>Paragraph 1 - emotional appeals:</b> media and advertisers use fear and outrage to bypass our reasoning. Example: fear-based COVID misinformation on Facebook; political ads warning of "catastrophe". Because emotional content spreads fastest, individuals must learn to pause and check.</p>
+      <p><b>Paragraph 2 - bias and influencers:</b> influencers use parasocial trust; undisclosed paid partnerships make advertising look like honest opinion. Selection and framing bias in news push readers to one side. Individuals must recognise these techniques.</p>
+      <p><b>Paragraph 3 - algorithms (the other side):</b> filter bubbles and engagement algorithms mean individuals never even see balanced content - so it is unfair to blame individuals alone. Platforms and regulators also carry responsibility.</p>
+      <p><b>Conclusion:</b> a justified judgement, e.g. "Critical thinking is the audience's primary defence against media manipulation - so the responsibility is shared, but the individual's skill is essential." This is a civic, not just academic, responsibility.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 5 · EVALUATE (10-20 marks style)</span>
+    <div class="question">Evaluate whether artificial intelligence improves critical thinking.</div>
+    <textarea placeholder="Plan and write your answer here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>Introduction:</b> Define AI tools and critical thinking. State position: AI can support critical thinking, but only if the user stays active, not passive.</p>
+      <p><b>For:</b> AI can help analysis - summarising long texts, showing counterarguments quickly, and giving access to many sources. For example, a student can ask an AI to present both sides of a debate, which supports open-mindedness.</p>
+      <p><b>Against:</b> AI encourages shortcuts. Students may accept answers without checking, which weakens evaluation skills. AI can also reproduce bias from its training data and can state false information confidently ("hallucination"), so trusting it blindly is dangerous. Example: deepfakes and AI-generated text make source verification harder than ever.</p>
+      <p><b>Judgement:</b> AI improves critical thinking only when used as a tool to question, not as a replacement for thinking. The responsibility stays with the human user to verify, compare and judge. On balance, it is a useful assistant but a harmful master.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="qtag">EXTRA 6 · SHORT ANSWER</span>
+    <div class="question">Describe what it means to "think critically" and give one example of a situation in everyday life or your studies where this skill is useful. (5 marks)</div>
+    <textarea placeholder="Write your answer here..." oninput="wc(this)"></textarea><div class="wcount">0 words</div>
+    <button class="btn" onclick="toggleA(this)">Show model answer</button>
+    <div class="answer">
+      <h4>Model answer (simple English)</h4>
+      <p><b>Point:</b> To think critically means to analyse and evaluate information objectively before forming a judgement - questioning claims, checking evidence, recognising bias and assumptions, instead of accepting information at face value.</p>
+      <p><b>Example:</b> When reading news online, a critical thinker asks: who wrote this, what evidence is given, is the source credible, and could the author have an agenda? In my degree this is essential: for example, in Law it means evaluating the credibility of witness testimony; in Nursing, questioning a diagnosis when symptoms do not match; in Business, checking whether market research has sampling bias; in Media, deconstructing how a story is framed.</p>
+      <p><b>Link:</b> Therefore, thinking critically is a practical daily skill that protects us from misinformation and weak arguments.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built from your HUM102 Week 1-10 materials + Mock Exam 2 (2503). Good luck - trust your preparation! 🎓
+</footer>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+function toggleA(btn){
+  var a = btn.parentElement.querySelector('.answer');
+  var open = a.style.display === 'block';
+  a.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Show model answer' : 'Hide model answer';
+}
+function toggleT(btn){
+  var t = btn.parentElement.querySelector('.tips');
+  var open = t.style.display === 'block';
+  t.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'What the examiner wants' : 'Hide examiner tips';
+}
+function wc(ta){
+  var n = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+  ta.parentElement.querySelector('.wcount').textContent = n + ' words';
+}
+
+/* ---------- timer ---------- */
+var tLeft = 100*60, tInt = null;
+function fmt(s){ var m=Math.floor(s/60), ss=s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }
+function startTimer(){
+  if(tInt) { clearInterval(tInt); tInt=null; return; }
+  tInt = setInterval(function(){
+    if(tLeft>0){ tLeft--; document.getElementById('clock').textContent = fmt(tLeft); }
+    else { clearInterval(tInt); tInt=null; alert('Time is up! Put your pen down 🖊️'); }
+  },1000);
+}
+function resetTimer(){ clearInterval(tInt); tInt=null; tLeft=100*60; document.getElementById('clock').textContent=fmt(tLeft); }
+
+/* ---------- objective quiz ---------- */
+var QUIZ = [
+ {q:"1. What is an argument?", o:["A disagreement between two people","A conclusion supported by one or more reasons (premises)","An emotional opinion stated loudly","A list of facts with no conclusion"], a:1, e:"An argument = a claim/conclusion backed by reasons and evidence. It is organised reasoning, not just a disagreement."},
+ {q:"2. 'She failed the exam because she is lazy.' - this statement is best described as…", o:["A fact","An opinion","An assumption","A conclusion"], a:2, e:"It is accepted without enough evidence - that makes it an assumption."},
+ {q:"3. Deductive reasoning moves from…", o:["Specific cases to a general rule","General rule to a specific case","Emotion to logic","Opinion to fact"], a:1, e:"Deductive = general → specific. If the premises are true, the conclusion is guaranteed (e.g. all humans are mortal; Socrates is human → Socrates is mortal)."},
+ {q:"4. 'Every swan I have seen is white, so all swans are white.' This is…", o:["Deductive reasoning","Inductive reasoning","Circular reasoning","A fact"], a:1, e:"Inductive = specific observations → general conclusion. Probable, not certain (black swans exist!)."},
+ {q:"5. Confirmation bias is…", o:["Relying on the first piece of information you hear","Favouring information that supports your existing beliefs","Agreeing with the group to avoid conflict","Judging people by their appearance"], a:1, e:"Confirmation bias = seeking, interpreting and remembering information that confirms what we already believe."},
+ {q:"6. Anchoring bias means…", o:["Favouring people from your own group","Relying too heavily on the first piece of information received","Only watching one news channel","Changing your mind too often"], a:1, e:"Example: a high 'original price' makes the sale price look cheap - your judgement is anchored to the first number."},
+ {q:"7. Attacking the person instead of their argument is called…", o:["Straw man","Slippery slope","Ad hominem","False dilemma"], a:2, e:"Ad hominem = attacking the character of the person, not the argument itself."},
+ {q:"8. Misrepresenting someone's argument to make it easier to attack is…", o:["Straw man","Ad hominem","Circular reasoning","Bandwagon"], a:0, e:"Straw man = you distort or exaggerate the opponent's position, then attack the distorted version."},
+ {q:"9. The difference between misinformation and disinformation is…", o:["There is no difference","Misinformation is always about politics","Disinformation is spread deliberately to deceive; misinformation is spread without intent to deceive","Misinformation is only in print media"], a:2, e:"Intent is the key difference: disinformation = deliberate deception; misinformation = shared by mistake or misunderstanding."},
+ {q:"10. What does the CRAAP test check?", o:["Creativity, Research, Arguments, Analysis, Proof","Currency, Relevance, Authority, Accuracy, Purpose","Claims, Reasons, Assumptions, Answers, Proof","Credibility, Reliability, Accuracy, Authority, Purpose"], a:1, e:"CRAAP = Currency, Relevance, Authority, Accuracy, Purpose - your tool for evaluating sources."},
+ {q:"11. An advert saying 'Don't risk your family's future - buy our security package' uses…", o:["Logos (logic)","Ethos (authority)","Pathos (emotional appeal)","A statistic"], a:2, e:"That is a fear appeal - pathos. Ethos = authority/credibility; logos = logic and evidence."},
+ {q:"12. 'Millions of satisfied customers have already switched!' is which technique?", o:["Testimonial","Bandwagon","Glittering generalities","Circular reasoning"], a:1, e:"Bandwagon = 'everyone is doing it, so you should too'."},
+ {q:"13. The command word 'Evaluate' requires you to…", o:["List the main features only","Give reasons why something happens","Weigh strengths, limitations and viewpoints, then reach a justified judgement","Describe your personal opinion without evidence"], a:2, e:"Evaluate = consider both sides + evidence, then commit to a reasoned judgement. A definition alone is not enough."},
+ {q:"14. In the PEE structure, the letters stand for…", o:["Point, Evidence, Ending","Point, Explain, Example","Plan, Explain, Evaluate","Point, Emotion, Evidence"], a:1, e:"PEE = Point → Explain → Example (add Link for PEEL in essays)."},
+ {q:"15. Which of these is NOT a barrier to critical thinking?", o:["Groupthink","Cognitive dissonance","Information overload","Open-mindedness"], a:3, e:"Open-mindedness HELPS critical thinking. The barriers from your lessons: groupthink, cognitive dissonance, emotional reasoning, information overload, bias, assumptions."},
+ {q:"16. The BBC Trump tariffs article is best described as…", o:["An opinion column attacking Trump","A neutral news explainer with a mild critical tilt through framing and story selection","A government press release","An academic journal article"], a:1, e:"The BBC uses attributed quotes and both sides, but gives more space to harms and uses loaded words like 'illegal tariffs' - neutral register, slight tilt in framing."},
+ {q:"17. Article One (The Independent) is strong mainly because…", o:["It takes a clear side and argues for it","It uses named author, direct IOC quotes, balanced cases and corrects misinformation","It uses emotional language","It cites the author's own research paper"], a:1, e:"Independent provenance + primary sources + balance + careful language = strong legitimacy."},
+ {q:"18. The biggest weakness of Article Two (The Conversation) is…", o:["It has no author name","The author helped design the policy he defends and only cites supporting studies - a conflict of interest and cherry-picking","It is too short","It uses too many statistics"], a:1, e:"He defends his own work, cites his own paper, calls contested science 'conclusive' and mocks opponents - signs of advocacy, not neutral analysis."}
+];
+
+var box = document.getElementById('quizBox');
+QUIZ.forEach(function(item, qi){
+  var div = document.createElement('div'); div.className='quiz-q';
+  var p = document.createElement('p'); p.textContent = item.q; div.appendChild(p);
+  item.o.forEach(function(opt, oi){
+    var lab = document.createElement('label'); lab.className='opt';
+    var inp = document.createElement('input'); inp.type='radio'; inp.name='q'+qi; inp.value=oi; inp.style.marginRight='8px';
+    lab.appendChild(inp);
+    lab.appendChild(document.createTextNode(opt));
+    lab.onclick=function(){ div.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); lab.classList.add('sel'); };
+    div.appendChild(lab);
+  });
+  var ex = document.createElement('div'); ex.className='expl'; ex.id='expl'+qi; ex.textContent=item.e; div.appendChild(ex);
+  box.appendChild(div);
+});
+
+function markQuiz(){
+  var score=0;
+  QUIZ.forEach(function(item, qi){
+    var chosen = document.querySelector('input[name="q'+qi+'"]:checked');
+    var qdiv = box.children[qi];
+    qdiv.querySelectorAll('.opt').forEach(function(o, oi){
+      o.classList.remove('right','wrong');
+      if(oi===item.a) o.classList.add('right');
+      else if(chosen && +chosen.value===oi) o.classList.add('wrong');
+    });
+    document.getElementById('expl'+qi).style.display='block';
+    if(chosen && +chosen.value===item.a) score++;
+  });
+  var s = document.getElementById('score');
+  var pct = Math.round(score/QUIZ.length*100);
+  var msg = pct>=70?'🏆 Distinction level!':pct>=60?'✅ Merit level - nearly there':pct>=50?'📝 Pass level - review the explanations':'❌ Below pass - re-read the explanations and try again';
+  s.style.display='block';
+  s.innerHTML='<b>Your score: '+score+' / '+QUIZ.length+' ('+pct+'%)</b> - '+msg;
+  s.scrollIntoView({behavior:'smooth'});
+}
+function resetQuiz(){
+  document.querySelectorAll('#quizBox input').forEach(i=>i.checked=false);
+  box.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','right','wrong'));
+  box.querySelectorAll('.expl').forEach(e=>e.style.display='none');
+  document.getElementById('score').style.display='none';
+  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
