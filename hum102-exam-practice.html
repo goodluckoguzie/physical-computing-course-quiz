@@ -64,7 +64,7 @@
   .opt.right{border-color:var(--ok);background:var(--ok-soft)}
   .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
   .expl{display:none;font-size:14px;color:var(--muted);background:#F4F1EC;border-radius:8px;padding:10px 14px;margin-top:6px}
-  #score{display:none;margin-top:18px;padding:16px 20px;border-radius:10px;background:var(--gold-soft);border:1px solid #E8DCC2;font-size:16px}
+  #score,#mockscore{display:none;margin-top:18px;padding:16px 20px;border-radius:10px;background:var(--gold-soft);border:1px solid #E8DCC2;font-size:16px}
   footer{margin-top:60px;color:var(--muted);font-size:13.5px;text-align:center;border-top:1px solid var(--line);padding-top:24px}
   .mini{font-size:13.5px;color:var(--muted)}
   @media(max-width:640px){header.hero h1{font-size:25px}}
@@ -76,7 +76,7 @@
   <div class="wrap">
     <span class="badge">HUM102 · CRITICAL THINKING · MOCK EXAM PRACTICE</span>
     <h1>Exam Practice Pack</h1>
-    <p>All 6 questions from your mock exam, with writing space, model answers in simple English, an auto-marked objective quiz, and extra practice questions from Weeks 7-10.</p>
+    <p>All 6 questions from your mock exam, with writing space, model answers in simple English, two auto-marked objective quizzes (including the mock exam converted into objective questions), and extra practice questions from Weeks 7-10.</p>
     <p><b>Exam structure:</b> Section 1 = four questions × 10 marks (your opinion, short paragraph) · Section 2 = one 20-mark analysis of the BBC Trump article · Section 3 = one 40-mark essay comparing two articles. Total = 100 marks.</p>
   </div>
 </header>
@@ -84,6 +84,7 @@
 <nav class="bar">
   <div class="wrap">
     <a href="#quiz">Objective Quiz</a>
+    <a href="#mockquiz">Mock Objective Exam</a>
     <a href="#articles">📖 Articles</a>
     <a href="#s1">Section 1 (Q1-Q4)</a>
     <a href="#s2">Section 2 (Q5)</a>
@@ -126,6 +127,15 @@
   <button class="btn" onclick="markQuiz()">Mark my answers</button>
   <button class="btn ghost" onclick="resetQuiz()">Try again</button>
   <div id="score"></div>
+</section>
+
+<!-- ============ MOCK OBJECTIVE EXAM ============ -->
+<section id="mockquiz">
+  <div class="sec-head"><h2>Part B - Mock Objective Exam (auto-marked)</h2><p>The 6 written mock exam questions converted into objective questions. Each group below matches one exam question (Q1-Q6). Click an answer, then press "Mark my answers" - or use "Show correct answer" on any question to peek.</p></div>
+  <div class="card" id="mockBox"></div>
+  <button class="btn" onclick="markMock()">Mark my answers</button>
+  <button class="btn ghost" onclick="resetMock()">Try again</button>
+  <div id="mockscore"></div>
 </section>
 
 <!-- ============ SECTION 1 ============ -->
@@ -613,6 +623,114 @@ function resetQuiz(){
   for(var i=0;i<QUIZ.length;i++){ document.getElementById('abtn'+i).textContent='Show correct answer'; }
   document.getElementById('score').style.display='none';
   document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+}
+
+/* ---------- mock objective exam (the 6 written questions as MCQs) ---------- */
+var QUIZ2 = [
+ {g:"Q1 - Key aspects of critical thinking", q:"1. Which of these is a key aspect of critical thinking?", o:["Believing information quickly so you save time","Questioning information before you believe it","Trusting your feelings more than evidence","Agreeing with the majority to be safe"], a:1, e:"Critical thinking starts with questioning: who said this, why, and what is the evidence?"},
+ {g:"Q1 - Key aspects of critical thinking", q:"2. Checking a source with Currency, Relevance, Authority, Accuracy and Purpose is called…", o:["The PEE structure","The CRAAP test","An echo chamber","Lateral thinking"], a:1, e:"The CRAAP test is your source-checking tool: Currency, Relevance, Authority, Accuracy, Purpose."},
+ {g:"Q1 - Key aspects of critical thinking", q:"3. Which of these is NOT a key aspect of critical thinking?", o:["Identifying assumptions","Recognising bias","Accepting claims without proof","Considering other viewpoints"], a:2, e:"Accepting claims without proof is the OPPOSITE of critical thinking - it is an assumption."},
+ {g:"Q1 - Key aspects of critical thinking", q:"4. A critical thinker should reach a conclusion based on…", o:["Feelings and first impressions","Evidence and logical reasoning","Whatever the group believes","The loudest opinion"], a:1, e:"Conclusions should follow from evidence and logic - and a critical thinker is willing to change their mind."},
+ {g:"Q2 - Using bias to influence opinion", q:"5. TikTok and X show you more of what you already liked. Which bias does this exploit?", o:["Anchoring bias","Confirmation bias","Selection bias","Framing bias"], a:1, e:"Confirmation bias - the algorithm builds an echo chamber that makes your existing view feel obviously right."},
+ {g:"Q2 - Using bias to influence opinion", q:"6. '90% effective' sounds good but '10% ineffective' sounds bad. Same facts! This is…", o:["Framing bias","Anchoring bias","Groupthink","Bandwagon"], a:0, e:"Framing bias - the way information is presented changes how we feel about it."},
+ {g:"Q2 - Using bias to influence opinion", q:"7. A shop shows a high 'original price' so the sale price looks cheap. This is…", o:["Testimonial","Glittering generalities","Anchoring bias","Circular reasoning"], a:2, e:"Anchoring bias - your judgement is anchored to the first number you saw."},
+ {g:"Q2 - Using bias to influence opinion", q:"8. A company shows only positive reviews and hides negative ones. This is…", o:["Selection bias","Emotional reasoning","Cognitive dissonance","Deductive reasoning"], a:0, e:"Selection bias - showing only chosen information so the product looks better than it is."},
+ {g:"Q2 - Using bias to influence opinion", q:"9. 'Don't risk your family's future - buy our security package' uses which persuasion technique?", o:["Testimonial","Fear appeal (pathos)","Glittering generalities","Logos"], a:1, e:"A fear appeal - it targets your emotions instead of your reasoning."},
+ {g:"Q3 - Critical thinking in your degree", q:"10. In Nursing, critical thinking mainly means…", o:["Always following the first diagnosis without question","Questioning a diagnosis when symptoms do not match and checking research before treatment","Trusting online health advice quickly","Avoiding evidence-based practice"], a:1, e:"Nurses use evidence-based practice: question, check research, do not rely on assumptions about patients."},
+ {g:"Q3 - Critical thinking in your degree", q:"11. In Law, spotting an ad hominem attack helps you to…", o:["Attack witnesses personally","Notice when someone attacks the person instead of the argument","Win by being louder","Ignore the evidence"], a:1, e:"Lawyers must evaluate arguments logically - attacking the person is a fallacy, not evidence."},
+ {g:"Q3 - Critical thinking in your degree", q:"12. In Business, why should you analyse market research critically?", o:["Because all data is fake","Because the data may have sampling bias or a commercial interest behind it","Because numbers do not matter in business","Because surveys are always leading"], a:1, e:"Businesses can make expensive mistakes from weak data - check sampling, leading questions and who paid for the research."},
+ {g:"Q3 - Critical thinking in your degree", q:"13. In Media, a critical thinker will always ask…", o:["How can I make this story more emotional?","Who created this content, what evidence is given, and what is its purpose?","How fast can I publish this?","Which headline gets the most clicks?"], a:1, e:"Media professionals deconstruct framing, check sources and ask about purpose - to inform, persuade, or sell."},
+ {g:"Q4 - Impediments (barriers) to critical thinking", q:"14. When new evidence contradicts your belief and you reject the evidence because it feels uncomfortable, this is…", o:["Groupthink","Cognitive dissonance","Anchoring bias","Information overload"], a:1, e:"Cognitive dissonance - the discomfort makes us reject evidence instead of changing our mind."},
+ {g:"Q4 - Impediments (barriers) to critical thinking", q:"15. In a group, people agree with the majority to avoid conflict, so bad ideas are not challenged. This is…", o:["Groupthink","Framing bias","Selection bias","A false dilemma"], a:0, e:"Groupthink - harmony is valued more than critical evaluation."},
+ {g:"Q4 - Impediments (barriers) to critical thinking", q:"16. There is so much content online that we skim headlines instead of checking sources. This barrier is…", o:["Emotional reasoning","Ego","Information overload","Stereotyping"], a:2, e:"Information overload - too much content makes deep checking feel impossible."},
+ {g:"Q4 - Impediments (barriers) to critical thinking", q:"17. Which of these helps to OVERCOME the barriers to critical thinking?", o:["Reading only sources you agree with","Slowing down, checking sources and looking for opposing views","Trusting your first reaction","Sharing emotional posts quickly"], a:1, e:"Slow down, verify (lateral reading), seek opposing views, and be honest about your own biases."},
+ {g:"Q5 - Analysing the BBC Trump tariffs article", q:"18. The BBC article's perspective is best described as…", o:["An open attack on Trump","A neutral news explainer with a mild critical tilt","A government press release","Pure opinion with no facts"], a:1, e:"It is neutral in tone but tilts against the tariffs through framing and story selection."},
+ {g:"Q5 - Analysing the BBC Trump tariffs article", q:"19. The BBC article builds trust mainly by…", o:["Using emotional photos only","Attaching almost every claim to a named source","Hiding who said what","Using the word 'illegal' in headings"], a:1, e:"Attribution to named sources (Trump, the Treasury Secretary, the UK spokesman, FedEx) is ethos - it makes claims checkable."},
+ {g:"Q5 - Analysing the BBC Trump tariffs article", q:"20. Which of these is a WEAKNESS of the BBC article?", o:["It quotes both sides","It gives exact figures like 2.4% inflation","It uses anonymous phrases like 'some analysts'","It explains what tariffs are"], a:2, e:"Anonymous sources like 'some analysts' cannot be checked - a critical reader should notice this."},
+ {g:"Q5 - Analysing the BBC Trump tariffs article", q:"21. How does the article quietly push a negative view of the tariffs?", o:["By refusing to quote Trump","Through framing and story selection - more space for harms, no pro-tariff voice","By inventing statistics","By writing in angry language"], a:1, e:"The author chose what to include: more harms than benefits, and no pro-tariff voice is quoted. Selection is influence."},
+ {g:"Q5 - Analysing the BBC Trump tariffs article", q:"22. The photos of the red 'MAGA' hat and the steelworker influence the reader through…", o:["Logic and statistics","Emotion - they create feelings before you read the text","The CRAAP test","Anonymous sourcing"], a:1, e:"Images work on emotion (pathos) before we even start reading."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"23. Article One (The Independent) is more convincing mainly because…", o:["It argues for one side strongly","Its provenance is independent and its sources are balanced and checkable","It is longer","It uses more emotional language"], a:1, e:"An independent journalist, named date, direct IOC quotes and athletes on both sides = strong legitimacy."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"24. The conflict of interest in Article Two (The Conversation) is that…", o:["The author is a philosopher","The author helped design the World Rugby policy he defends and cites his own paper","The article was published in 2021","The author works at a university"], a:1, e:"He is defending his own work - he benefits from the conclusion, which weakens his independence."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"25. Citing only the studies that support your view is called…", o:["Balanced reporting","Cherry-picking","Primary sourcing","Lateral reading"], a:1, e:"Cherry-picking - choosing only favourable evidence weakens an argument's legitimacy."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"26. Article Two says the science is 'conclusive'. Why is this a weakness?", o:["Because science is never useful","Because the science was actually contested - it overclaims","Because it uses too few words","Because it quotes real scientists"], a:1, e:"Calling contested science 'conclusive' is overclaiming - a sign of advocacy, not neutral analysis."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"27. The '20-30% greater forces' statistic in Article Two is weak because…", o:["It is a percentage","It comes from World Rugby's own modelling - the same organisation whose policy the author defends - and is a prediction, not real injury data","It is about rugby","It is too small"], a:1, e:"The key number comes from the organisation behind the policy, and it is a model, not measured injuries."},
+ {g:"Q6 - Comparing Article One and Article Two", q:"28. Which article corrects misinformation about the boxers Khelif and Lin?", o:["Article Two (The Conversation)","Article One (The Independent) - it states clearly they do not identify as transgender","Neither article","Both articles"], a:1, e:"The Independent corrects the record - a sign of careful, balanced journalism."}
+];
+
+var box2 = document.getElementById('mockBox');
+var lastGroup = '';
+QUIZ2.forEach(function(item, qi){
+  if(item.g !== lastGroup){
+    lastGroup = item.g;
+    var gh = document.createElement('div');
+    gh.style.cssText='margin:22px 0 4px;font-family:Georgia,serif;font-weight:700;font-size:17px;color:var(--accent-dark);border-bottom:2px solid var(--accent-soft);padding-bottom:6px';
+    gh.textContent = item.g;
+    box2.appendChild(gh);
+  }
+  var div = document.createElement('div'); div.className='quiz-q';
+  var p = document.createElement('p'); p.textContent = item.q; div.appendChild(p);
+  item.o.forEach(function(opt, oi){
+    var lab = document.createElement('label'); lab.className='opt';
+    var inp = document.createElement('input'); inp.type='radio'; inp.name='m'+qi; inp.value=oi; inp.style.marginRight='8px';
+    lab.appendChild(inp);
+    lab.appendChild(document.createTextNode(opt));
+    lab.onclick=function(){ div.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); lab.classList.add('sel'); };
+    div.appendChild(lab);
+  });
+  var ex = document.createElement('div'); ex.className='expl'; ex.id='mexpl'+qi;
+  ex.innerHTML='<b>Correct answer: '+item.o[item.a]+'</b><br>'+item.e;
+  div.appendChild(ex);
+  var abtn = document.createElement('button'); abtn.className='btn ghost'; abtn.id='mbtn'+qi;
+  abtn.style.cssText='margin-top:10px;padding:8px 16px;font-size:14px';
+  abtn.textContent='Show correct answer';
+  abtn.onclick=function(){ toggleMockAns(qi); };
+  div.appendChild(abtn);
+  box2.appendChild(div);
+});
+
+function mockQDivs(){ return Array.prototype.filter.call(box2.children, function(c){ return c.classList.contains('quiz-q'); }); }
+
+function toggleMockAns(qi){
+  var ex = document.getElementById('mexpl'+qi);
+  var btn = document.getElementById('mbtn'+qi);
+  var qdiv = mockQDivs()[qi];
+  var open = ex.style.display === 'block';
+  ex.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Show correct answer' : 'Hide correct answer';
+  qdiv.querySelectorAll('.opt').forEach(function(o, oi){
+    if(oi===QUIZ2[qi].a){ open ? o.classList.remove('right') : o.classList.add('right'); }
+  });
+}
+
+function markMock(){
+  var score=0;
+  var qdivs = mockQDivs();
+  QUIZ2.forEach(function(item, qi){
+    var chosen = document.querySelector('input[name="m'+qi+'"]:checked');
+    var qdiv = qdivs[qi];
+    qdiv.querySelectorAll('.opt').forEach(function(o, oi){
+      o.classList.remove('right','wrong');
+      if(oi===item.a) o.classList.add('right');
+      else if(chosen && +chosen.value===oi) o.classList.add('wrong');
+    });
+    document.getElementById('mexpl'+qi).style.display='block';
+    document.getElementById('mbtn'+qi).textContent='Hide correct answer';
+    if(chosen && +chosen.value===item.a) score++;
+  });
+  var s = document.getElementById('mockscore');
+  var pct = Math.round(score/QUIZ2.length*100);
+  var msg = pct>=70?'🏆 Distinction level!':pct>=60?'✅ Merit level - nearly there':pct>=50?'📝 Pass level - review the explanations':'❌ Below pass - re-read the explanations and try again';
+  s.style.display='block';
+  s.innerHTML='<b>Your score: '+score+' / '+QUIZ2.length+' ('+pct+'%)</b> - '+msg;
+  s.scrollIntoView({behavior:'smooth'});
+}
+function resetMock(){
+  document.querySelectorAll('#mockBox input').forEach(i=>i.checked=false);
+  box2.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','right','wrong'));
+  box2.querySelectorAll('.expl').forEach(e=>e.style.display='none');
+  for(var i=0;i<QUIZ2.length;i++){ document.getElementById('mbtn'+i).textContent='Show correct answer'; }
+  document.getElementById('mockscore').style.display='none';
+  document.getElementById('mockquiz').scrollIntoView({behavior:'smooth'});
 }
 </script>
 </body>
