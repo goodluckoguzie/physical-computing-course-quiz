@@ -121,7 +121,7 @@
 
 <!-- ============ OBJECTIVE QUIZ ============ -->
 <section id="quiz">
-  <div class="sec-head"><h2>Part A - Objective Quiz (auto-marked)</h2><p>18 quick questions on the key concepts and the two exam articles. Click an answer, then press "Mark my answers".</p></div>
+  <div class="sec-head"><h2>Part A - Objective Quiz (auto-marked)</h2><p>18 quick questions on the key concepts and the two exam articles. Click an answer, then press "Mark my answers" - or use "Show correct answer" on any question to peek, just like the model answers below.</p></div>
   <div class="card" id="quizBox"></div>
   <button class="btn" onclick="markQuiz()">Mark my answers</button>
   <button class="btn ghost" onclick="resetQuiz()">Try again</button>
@@ -550,9 +550,28 @@ QUIZ.forEach(function(item, qi){
     lab.onclick=function(){ div.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); lab.classList.add('sel'); };
     div.appendChild(lab);
   });
-  var ex = document.createElement('div'); ex.className='expl'; ex.id='expl'+qi; ex.textContent=item.e; div.appendChild(ex);
+  var ex = document.createElement('div'); ex.className='expl'; ex.id='expl'+qi;
+  ex.innerHTML='<b>Correct answer: '+item.o[item.a]+'</b><br>'+item.e;
+  div.appendChild(ex);
+  var abtn = document.createElement('button'); abtn.className='btn ghost'; abtn.id='abtn'+qi;
+  abtn.style.cssText='margin-top:10px;padding:8px 16px;font-size:14px';
+  abtn.textContent='Show correct answer';
+  abtn.onclick=function(){ toggleQuizAns(qi); };
+  div.appendChild(abtn);
   box.appendChild(div);
 });
+
+function toggleQuizAns(qi){
+  var ex = document.getElementById('expl'+qi);
+  var btn = document.getElementById('abtn'+qi);
+  var qdiv = box.children[qi];
+  var open = ex.style.display === 'block';
+  ex.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Show correct answer' : 'Hide correct answer';
+  qdiv.querySelectorAll('.opt').forEach(function(o, oi){
+    if(oi===QUIZ[qi].a){ open ? o.classList.remove('right') : o.classList.add('right'); }
+  });
+}
 
 function markQuiz(){
   var score=0;
@@ -565,6 +584,7 @@ function markQuiz(){
       else if(chosen && +chosen.value===oi) o.classList.add('wrong');
     });
     document.getElementById('expl'+qi).style.display='block';
+    document.getElementById('abtn'+qi).textContent='Hide correct answer';
     if(chosen && +chosen.value===item.a) score++;
   });
   var s = document.getElementById('score');
@@ -578,6 +598,7 @@ function resetQuiz(){
   document.querySelectorAll('#quizBox input').forEach(i=>i.checked=false);
   box.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel','right','wrong'));
   box.querySelectorAll('.expl').forEach(e=>e.style.display='none');
+  for(var i=0;i<QUIZ.length;i++){ document.getElementById('abtn'+i).textContent='Show correct answer'; }
   document.getElementById('score').style.display='none';
   document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
 }
